@@ -25,11 +25,21 @@
 //if you want to debug print routines to direct their output to the EmbeddedICE
 // macrocell's DCC channel using co-processor 14. This is known to work on the ARM9 style ICE channel.
 
+//ARM 버전별로 적용
 #if defined(CONFIG_CPU_V6) || defined(CONFIG_CPU_V6K) || defined(CONFIG_CPU_V7)
-		.macro	loadsp, rb, tmp
+		.macro	loadsp, rb, tmp			//.macro: 매크로
 		.endm
 		.macro	writeb, ch, rb
-		mcr	p14, 0, \ch, c0, c5, 0
+		/*
+		 * 디버깅 관련 설정 (교재 663 page / TRM 257 page)
+		 * 
+		 * - mcr이란? 코프로세서 전용 MOV명령어
+		 * - '\'의 역할? 매크로의 인자를 표현한다.
+		 * - mcr 명령의 인자?
+		 *   - p14: 코프로세서(디버거,tracer)
+		 *   - 0, c0, c5, 0: TRM 257 page 참조
+		 */
+		mcr	p14, 0, \ch, c0, c5, 0		//Debugger로 명령을 보낸다.
 		.endm
 #elif defined(CONFIG_CPU_XSCALE)
 		.macro	loadsp, rb, tmp
@@ -50,7 +60,7 @@
 #include CONFIG_DEBUG_LL_INCLUDE
 
 		.macro	writeb,	ch, rb
-		senduart \ch, \rb
+		senduart \ch, \rb			//UART로 명령을 보낸다.
 		.endm
 
 #if defined(CONFIG_ARCH_SA1100)
@@ -120,16 +130,34 @@
 /*
  * sort out different calling conventions
  */
+<<<<<<< HEAD
 		.align 	
+=======
+		/* 지금부터 ARM 모드를 사용한다는 뜻. */
+		.align
+>>>>>>> eed035541b2fd2a7d724467aaa0ba0f7645a64cf
 		.arm				@ Always enter in ARM state
 start:
+		/* .type: symbol table에 entry에 속성을 기록한다.
+		 * start 레이블은 함수 타입이다.
+		 */
 		.type	start,#function
+
+		/* .rept와 .endr 사이를 7번 반복한다.
+		 * 실제로 하는 일은 없음.
+		 */
 		.rept	7
 		mov	r0, r0
 		.endr
+		/* - 'ARM', 'THUMB' 매크로는 현재 cpu mode가 무엇인지(arm,thumb,thum-2)에 따라
+		 *   둘 중 하나를 삭제한다.
+		 * - 'b  1f'에서 1은 레이블 이름. f는 forward방향을 뜻함. (f: forward / b: before)
+		 */
    ARM(		mov	r0, r0		)
    ARM(		b	1f		)
- THUMB(		adr	r12, BSYM(1f)	)
+	//r12: scratch 레지스터
+	//b	1f를 THUMB 두 명령으로 표현
+ THUMB(		adr	r12, BSYM(1f)	)//#define BSYM(sym)	sym + 1
  THUMB(		bx	r12		)
 // 0x016f2818 is a signature for boot loader to identify the image as a linux kernel zImage.
 	//This is at a physical offset 0x24 from the start of the actual zImage and can be used to verify
@@ -137,13 +165,24 @@ start:
 	//this would probably help a bootloader detect a bootable zImage. We now preserve r0, r1 by storing
 	//them in r8 r7 so that the scratch registers are available for manipulation through the rest of the code.
 
+		/* 부트로더에게 알려주는 magic number */
 		.word	0x016f2818		@ Magic numbers to help the loader
+
+		/* start 레이블의 주소 */
 		.word	start			@ absolute load/run zImage address
+
+		/* edata는 ELF의 제일 마지막 주소 */
 		.word	_edata			@ zImage end address
  THUMB(		.thumb			)
 1:
+		/* mrs란? move to register from special register */
 		mrs	r9, cpsr
+
+		/* CONFIG_ARM_VIRT_EXT란?
+		 * firmware의 실시간 지원 없이 하이퍼바이저를 설치하기 위한 ARM 가상화 확장 옵션
+		 */
 #ifdef CONFIG_ARM_VIRT_EXT
+		/* b는 이동. bl은 lr=pc 후 이동 */
 		bl	__hyp_stub_install	@ get into SVC mode, reversibly
 #endif
 		mov	r7, r1			@ save architecture ID
