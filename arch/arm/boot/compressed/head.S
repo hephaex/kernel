@@ -22,6 +22,8 @@
 #ifdef DEBUG
 
 #if defined(CONFIG_DEBUG_ICEDCC)
+//if you want to debug print routines to direct their output to the EmbeddedICE
+// macrocell's DCC channel using co-processor 14. This is known to work on the ARM9 style ICE channel.
 
 #if defined(CONFIG_CPU_V6) || defined(CONFIG_CPU_V6K) || defined(CONFIG_CPU_V7)
 		.macro	loadsp, rb, tmp
@@ -118,7 +120,7 @@
 /*
  * sort out different calling conventions
  */
-		.align
+		.align 	
 		.arm				@ Always enter in ARM state
 start:
 		.type	start,#function
@@ -129,6 +131,11 @@ start:
    ARM(		b	1f		)
  THUMB(		adr	r12, BSYM(1f)	)
  THUMB(		bx	r12		)
+// 0x016f2818 is a signature for boot loader to identify the image as a linux kernel zImage.
+	//This is at a physical offset 0x24 from the start of the actual zImage and can be used to verify
+	// whether a given image is actually a compressed linux kernel. In the case of a relocation,
+	//this would probably help a bootloader detect a bootable zImage. We now preserve r0, r1 by storing
+	//them in r8 r7 so that the scratch registers are available for manipulation through the rest of the code.
 
 		.word	0x016f2818		@ Magic numbers to help the loader
 		.word	start			@ absolute load/run zImage address

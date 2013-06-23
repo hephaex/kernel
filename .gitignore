@@ -44,7 +44,7 @@ modules.builtin
 /System.map
 /Module.markers
 /Module.symvers
-
+tags
 #
 # Debian directory (make deb-pkg)
 #
@@ -73,7 +73,6 @@ series
 # cscope files
 cscope.*
 ncscope.*
-
 # gnu global files
 GPATH
 GRTAGS
