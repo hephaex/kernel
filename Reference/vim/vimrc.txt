@@ -159,8 +159,8 @@ map ,0 :b!0<CR>	  " Switch to File Buffer #0
 "file
 "autocmd BufEnter * silent! lcd %:p:h:gs/ /\\/
 
-set tags=./tags;/.
-set tags+=/root/kernel/linux-3.8.10/tags
+set tags=./tags,tags
+"set tags+=/root/kernel/linux-3.8.10/tags
 
 if version >= 500
 
