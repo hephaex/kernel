@@ -250,10 +250,22 @@
 .macro safe_svcmode_maskall reg:req
 #if __LINUX_ARM_ARCH__ >= 6
 	mrs	\reg , cpsr
-	eor	\reg, \reg, #HYP_MODE
-	tst	\reg, #MODE_MASK
+	eor	\reg, \reg, #HYP_MODE  //HYP_MODE =0x0000001a
+	tst	\reg, #MODE_MASK		// MODE_MASK = 0x0000001f
 	bic	\reg , \reg , #MODE_MASK
 	orr	\reg , \reg , #PSR_I_BIT | PSR_F_BIT | SVC_MODE
+/*
+#define PSR_T_BIT	0x00000020
+#define PSR_F_BIT	0x00000040
+#define PSR_I_BIT	0x00000080
+#define PSR_A_BIT	0x00000100
+#define PSR_E_BIT	0x00000200
+#define PSR_J_BIT	0x01000000
+#define PSR_Q_BIT	0x08000000
+#define PSR_V_BIT	0x10000000
+#define PSR_C_BIT	0x20000000
+#define PSR_Z_BIT	0x40000000
+*/
 THUMB(	orr	\reg , \reg , #PSR_T_BIT	)
 	bne	1f
 	orr	\reg, \reg, #PSR_A_BIT
