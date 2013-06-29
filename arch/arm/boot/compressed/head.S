@@ -131,11 +131,17 @@
  * sort out different calling conventions
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 		.align 	
 =======
 		/* 지금부터 ARM 모드를 사용한다는 뜻. */
 		.align
 >>>>>>> eed035541b2fd2a7d724467aaa0ba0f7645a64cf
+=======
+		/* 4byte로 메모리를 align한다는 뜻. (default: 4) */
+		.align
+		/* 이제부터 나오는opcode는 arm임을 어셈블러에게 알림 */
+>>>>>>> 61c7abd3b49ca033d2f52a26e1ee385305567967
 		.arm				@ Always enter in ARM state
 start:
 		/* .type: symbol table에 entry에 속성을 기록한다.
@@ -143,21 +149,40 @@ start:
 		 */
 		.type	start,#function
 
-		/* .rept와 .endr 사이를 7번 반복한다.
-		 * 실제로 하는 일은 없음.
+		/*
+		 * - 이 코드가 하는 일:
+		 *   instruction(mov r0, r0)를 8번 반복합니다.
+		 *
+		 * - 탄생비화:
+		 *   옛날옛날에 어떤 거지같은 부트로더가 있었는데 그놈은 이미지 올려놓은 램주소에서 
+		 *   8 Word(32byte = 0x20)만큼의 하위 주소를 call해 버렸었고 올려놓은 주소에서
+		 *   offset(0x24~0x30)사이에 magic number를 찾았답니다. 그래서 그런 부트로더들 
+		 *   맞춰줄려고 head.s에 의미없는 instruction(mov r0, r0)를 8번(8 Word)해서 소비합니다. 
+		 *
+		 *   참조: 
+		 *     - http://www.iamroot.org/xe/QnA/23099
+		 *     - http://comments.gmane.org/gmane.linux.ports.arm.kernel/26690
+		 *
+		 * - ARM(), THUMB() 매크로:
+		 *   CONFIG_THUMB2_KERNEL 옵션이 켜져 있으면 ARM()매크로는 버리고  THUMB()매크로만 사용합니다.
+		 *   반대의 경우는 ARM()매크로만 사용하고, THUMB()는 버립니다.
+		 *
+		 * - instruction(b  1f)에서 '1f'의 뜻:
+		 *   '1'은 레이블 이름. 'f'는 forward방향을 뜻함. (f: forward / b: before)
+		 *
+		 * - BSYM()매크로:
+		 *   #ifdef CONFIG_THUMB2_KERNEL
+		 *     #define BSYM(sym)	sym + 1
+		 *   #else	
+		 *     #define BSYM(sym)	sym
+		 *   #endif	
 		 */
 		.rept	7
 		mov	r0, r0
 		.endr
-		/* - 'ARM', 'THUMB' 매크로는 현재 cpu mode가 무엇인지(arm,thumb,thum-2)에 따라
-		 *   둘 중 하나를 삭제한다.
-		 * - 'b  1f'에서 1은 레이블 이름. f는 forward방향을 뜻함. (f: forward / b: before)
-		 */
    ARM(		mov	r0, r0		)
    ARM(		b	1f		)
-	//r12: scratch 레지스터
-	//b	1f를 THUMB 두 명령으로 표현
- THUMB(		adr	r12, BSYM(1f)	)//#define BSYM(sym)	sym + 1
+ THUMB(		adr	r12, BSYM(1f)	)
  THUMB(		bx	r12		)
 // 0x016f2818 is a signature for boot loader to identify the image as a linux kernel zImage.
 	//This is at a physical offset 0x24 from the start of the actual zImage and can be used to verify
@@ -165,13 +190,26 @@ start:
 	//this would probably help a bootloader detect a bootable zImage. We now preserve r0, r1 by storing
 	//them in r8 r7 so that the scratch registers are available for manipulation through the rest of the code.
 
-		/* 부트로더에게 알려주는 magic number */
+		/*
+		 * - (.word 0x016f2818)의 뜻:
+		 *   부트로더에게 linux kernel zImage임을 알려주는 매직넘버입니다.
+		 *   정말인지 zImage를 실제로 읽어서 확인해 VOA요.
+		 *
+		 *     $ hd arch/arm/boot/zImage | head -n3
+		 *     00000000  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 00 00 a0 e1
+		 *     *
+		 *     00000020  02 00 00 ea 18 28 6f 01  00 00 00 00 10 3b 3d 00
+		 *                           -----------  ----------- -----------
+		 *                           0x016f2818   start       _edata
+		 *
+		 * - (.word start)의 뜻:
+		 *   start는 start 레이블을 뜻하며 실제로 0x00000000이 들어갑니다.
+		 *
+		 * - (.word _edata)의 뜻:
+		 *   _edata는 zImage의 끝을 뜻하며, arch/arm/kernel/vmlinux.lds.S 에서 정의합니다.
+		 */
 		.word	0x016f2818		@ Magic numbers to help the loader
-
-		/* start 레이블의 주소 */
 		.word	start			@ absolute load/run zImage address
-
-		/* edata는 ELF의 제일 마지막 주소 */
 		.word	_edata			@ zImage end address
  THUMB(		.thumb			)
 1:
