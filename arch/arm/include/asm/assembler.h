@@ -259,7 +259,7 @@
 	*/
 
 .macro safe_svcmode_maskall reg:req
-#if __LINUX_ARM_ARCH__ >= 6
+#if __LINUX_ARM_ARCH__ >= 6     // ARCH는 ARMv6 이상 버전 체크
 	mrs	\reg , cpsr		; reg = cpsr
 	eor	\reg, \reg, #HYP_MODE	; [1]
 	tst	\reg, #MODE_MASK	; [2]

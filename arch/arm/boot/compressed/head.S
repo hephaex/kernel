@@ -186,11 +186,13 @@ start:
 		 *                           -----------  ----------- -----------
 		 *                           0x016f2818   start       _edata=0x003d3b10
 		 *
-			00000000  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 00 00 a0 e1  
-			00000010  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 0d c0 8f e2 
-			00000020  1c ff 2f e1 18 28 6f 01  00 00 00 00 80 bc 39 00 
+         *  Thumb mode image 
+         *  -------------------------------------------------------------------
+		 *  00000000  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 00 00 a0 e1  
+		 *  00000010  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 0d c0 8f e2 
+		 *  00000020  1c ff 2f e1 18 28 6f 01  00 00 00 00 80 bc 39 00 
 		 *                           0x016f2818   start       _edata=0x0039bc80
-
+         *
 		 * - (.word start)의 뜻:
 		 *   start는 start 레이블을 뜻하며 실제로 0x00000000이 들어갑니다.
 		 *
@@ -229,10 +231,14 @@ start:
  ARM(		swi	0x123456	)	@ angel_SWI_ARM
  THUMB(		svc	0xab		)	@ angel_SWI_THUMB
 not_angel:
-		safe_svcmode_maskall r0
+        /* 이 이후 코드는 SVC mode로 동작*/
+		safe_svcmode_maskall r0 
+        /* 접미사 cxsf 의미? PSR 필드의 접미사임
+         * SVC mode 용 SPSR에 저장             */
 		msr	spsr_cxsf, r9		@ Save the CPU boot mode in
 						@ SPSR
 #else
+        /* ARMv2 일 경우 수행 됨*/
 		teqp	pc, #0x0c000003		@ turn off interrupts
 #endif
 
@@ -246,17 +252,26 @@ not_angel:
 		 * by the linker here, but it should preserve r7, r8, and r9.
 		 */
 
+        /* ELF format 의 text section 정의
+         * Section directive 사용/ 사용안한 코드의 차이는?
+         * vmlinux.lds.in file의 .text 가 맞는지? */
 		.text
 
+        /* exynos defconfig 기준으로 code 분석 
+         * CONFIG_AUTO_ZRELADDR 는 빠져 있으므로 아래 코드는 Skip */ 
 #ifdef CONFIG_AUTO_ZRELADDR
 		@ determine final kernel image address
 		mov	r4, pc
 		and	r4, r4, #0xf8000000
 		add	r4, r4, #TEXT_OFFSET
 #else
+        /* = 의 의미는? : pesudo assembler 임
+         * mov r4 #zreladdr 와 동일 
+         * arm/Makefile 의 TEXT_OFFSET 값이 적혀 있음
+         * TEXT_OFFSET 값의 의미는? datasheet 찾아봐야됨*/
 		ldr	r4, =zreladdr
 #endif
-
+        /* link reg 에 pc를 저장하고 cache_on로jump */
 		bl	cache_on
 
 restart:	adr	r0, LC0
@@ -614,6 +629,8 @@ params:		ldr	r0, =0x10000100		@ params_phys for RPC
  * This routine must preserve:
  *  r4, r7, r8
  */
+        /* memory를 2^5 (32byte) 으로 align 시킴
+         * default align 은 2^4 (16byte) 임 */
 		.align	5
 cache_on:	mov	r3, #8			@ cache_on function
 		b	call_cache_fn
@@ -847,12 +864,20 @@ __common_mmu_cache_on:
  *  r12 = corrupted
  */
 
+/* 주석의 corrupted 의 의미는? :  */
 call_cache_fn:	adr	r12, proc_types
 #ifdef CONFIG_CPU_CP15
+        /* Coprocessor 에서 processor ID를 가져옴  */
 		mrc	p15, 0, r9, c0, c0	@ get processor ID
 #else
+        /* 코드에서 processor ID를 가져옴 */
 		ldr	r9, =CONFIG_PROCESSOR_ID
 #endif
+        /* 
+            .word	0x000f0000		@ new CPU Id
+            .word	0x000f0000
+         */
+        /* 2013/06/29 분석 code 위치 */
 1:		ldr	r1, [r12, #0]		@ get value
 		ldr	r2, [r12, #4]		@ get mask
 		eor	r1, r1, r9		@ (real ^ match)
@@ -1005,8 +1030,10 @@ proc_types:
 		W(b)	__armv4_mmu_cache_off
 		W(b)	__armv6_mmu_cache_flush
 
+        /* ARMv7 용 cache struct 정의 */
 		.word	0x000f0000		@ new CPU Id
 		.word	0x000f0000
+        /* W 의 의미는? include/asm/unified.h 참고 */
 		W(b)	__armv7_mmu_cache_on
 		W(b)	__armv7_mmu_cache_off
 		W(b)	__armv7_mmu_cache_flush
