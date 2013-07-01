@@ -259,33 +259,33 @@
 	*/
 
 .macro safe_svcmode_maskall reg:req
-#if __LINUX_ARM_ARCH__ >= 6     // ARCH는 ARMv6 이상 버전 체크
-	mrs	\reg , cpsr		; reg = cpsr
-	eor	\reg, \reg, #HYP_MODE	; [1]
-	tst	\reg, #MODE_MASK	; [2]
+#if __LINUX_ARM_ARCH__ >= 6		// ARCH는 ARMv6 이상 버전 체크
+	mrs	\reg , cpsr		// reg = cpsr
+	eor	\reg, \reg, #HYP_MODE	// [1]
+	tst	\reg, #MODE_MASK	// [2]
 	bic	\reg , \reg , #MODE_MASK
 	orr	\reg , \reg , #PSR_I_BIT | PSR_F_BIT | SVC_MODE
 THUMB(	orr	\reg , \reg , #PSR_T_BIT	)
-	bne	1f			; [3] 
+	bne	1f			// [3] 
 	orr	\reg, \reg, #PSR_A_BIT  // A bit의 의미는? : async abort bit 임 
-                                // hyper 모드에 필요한 작업, 왜 필요한지는 찾아 봐야함
+					// hyper 모드에 필요한 작업, 왜 필요한지는 찾아 봐야함
                                 
-	adr	lr, BSYM(2f)    // 이명령이 필요한 이유? 
-                        // relocatable 해짐 
-                        // lr = PC + label 2 위치 - 현재 위치
+	adr	lr, BSYM(2f)		// 이명령이 필요한 이유? 
+					// relocatable 해짐 
+					// lr = PC + label 2 위치 - 현재 위치
                         
 	msr	spsr_cxsf, \reg // spsr register 에 r0 값 전달
-                        // 수행이유? hyperviser 가 lr로 돌아올때 spsr 을 cpsr로 자동 업데이트
+				// 수행이유? hyperviser 가 lr로 돌아올때 spsr 을 cpsr로 자동 업데이트
                         
-	__MSR_ELR_HYP(14)   // 14의 의미? r14을 인자로 넘김
-	__ERET              // PC <- ELR, CPSR <- SPSR
+	__MSR_ELR_HYP(14)	// 14의 의미? r14을 인자로 넘김
+	__ERET			// PC <- ELR, CPSR <- SPSR
 
 1:	msr	cpsr_c, \reg    // cpsr_c 의 의미? : control byte를 업데이트 하는 것. 
-                        // I, F, T, + MODE, 이런 bits 의 값만 CPSR 에서 업데이트 함
-                        // c = 제어필드 마스크 7~0
-                        // f = 플래그 마스크 31~24
-                        // s = 상태 마스크 23~16
-                        // x = 확장 마스크 15~8
+				// I, F, T, + MODE, 이런 bits 의 값만 CPSR 에서 업데이트 함
+				// c = 제어필드 마스크 7~0
+                        	// f = 플래그 마스크 31~24
+                        	// s = 상태 마스크 23~16
+                        	// x = 확장 마스크 15~8
 2:
 #else
 /*
