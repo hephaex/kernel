@@ -200,8 +200,13 @@ start:
 		 *     *
 		 *     00000020  02 00 00 ea 18 28 6f 01  00 00 00 00 10 3b 3d 00
 		 *                           -----------  ----------- -----------
-		 *                           0x016f2818   start       _edata
+		 *                           0x016f2818   start       _edata=0x003d3b10
 		 *
+			00000000  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 00 00 a0 e1  
+			00000010  00 00 a0 e1 00 00 a0 e1  00 00 a0 e1 0d c0 8f e2 
+			00000020  1c ff 2f e1 18 28 6f 01  00 00 00 00 80 bc 39 00 
+		 *                           0x016f2818   start       _edata=0x0039bc80
+
 		 * - (.word start)의 뜻:
 		 *   start는 start 레이블을 뜻하며 실제로 0x00000000이 들어갑니다.
 		 *
@@ -223,8 +228,9 @@ start:
 		/* b는 이동. bl은 lr=pc 후 이동 */
 		bl	__hyp_stub_install	@ get into SVC mode, reversibly
 #endif
-		mov	r7, r1			@ save architecture ID
-		mov	r8, r2			@ save atags pointer
+		// 부트로더가 커널에게 넘겨주는 값.
+		mov	r7, r1			@ save architecture ID	; r7 = r1
+		mov	r8, r2			@ save atags pointer	; r8 = r2
 
 #ifndef __ARM_ARCH_2__
 		/*
