@@ -888,6 +888,14 @@ call_cache_fn:	adr	r12, proc_types
 #else
         /* 코드에서 processor ID를 가져옴 */
 		ldr	r9, =CONFIG_PROCESSOR_ID
+	/*config PROCESSOR_ID
+	hex 'Hard wire the processor ID'
+	default 0x00007700
+	depends on !CPU_CP15
+	help
+	  If processor has no CP15 register, this processor ID is
+	  used instead of the auto-probing which utilizes the register.
+	  */
 #endif
         /* 
             .word	0x000f0000		@ new CPU Id
