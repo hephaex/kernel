@@ -1,49 +1,54 @@
 #IAMROOT.ORG Kernel스터디10차(ARM)
 
 #HISTORY
-* 74th (2014/10/18) week study : [74차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_74.md)
+- 75th (2014/10/25) week: [75차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_75.md)
  - init_IRQ()
-* 73th (2014/10/11) week study : [73차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_73.md)
+ - RBTree 알고리즘
+- 74th (2014/10/18) week: [74차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_74.md)
  - init_IRQ()
-* 73th (2014/10/11) week study : [73차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_73.md)
+- 73th (2014/10/11) week: [73차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_73.md)
  - init_IRQ()
-* 72th (2014/10/04) week study : [72차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_72.md)
-* 71th (2014/09/27) week study : [71차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_71.md)
-* 70th (2014/09/20) week study : [70차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_70.md)
-* 69th (2014/09/13) week study : [69차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_69.md)
+- 72th (2014/10/04) week: [72차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_72.md)
+ - tick_nohz_init()
+ - context_tracking_init()
+ - radix_tree_init()
+ - early_irq_init()
+ - init_IRQ()
+- 71th (2014/09/27) week: [71차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_71.md)
+ - rcu_init()
+- 70th (2014/09/20) week: [70차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_70.md)
+ - rcu_init()
+- 69th (2014/09/13) week: [69차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_69.md)
  - sched_init()를 계속 분석
  - sched_init()::for_each_possible_cpu(i) { ... }
  - sched_init()->set_load_weight()
  - sched_init()->plist_head_init()
  - sched_init()->init_idle()
  - sched_init()->zalloc_cpumask_var()
-* 68th (2014/08/30) week study : [68차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_68.md)
- - sched_init()를 계속 분석
- - sched_init()->init_defrootdomain()
-  - // def_root_domain의 맴버 값을 초기화 수행
- - sched_init()->init_rt_bandwidth(&def_rt_bandwidth, global_rt_period(), global_rt_runtime());
- - sched_init()::for_each_possible_cpu(i) { ... } 
-* 67th (2014/08/23) week study : [67차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_67.md)
+* 68th (2014/08/30) week: [68차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_68.md)
+ - sched_init()
+ - rq 설정 (for_each_possible_cpu(i))
+* 67th (2014/08/23) week: [67차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_67.md)
  - mm_init() 복습
- - slub()　복습
-* 66th (2014/08/16) week study : [66차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_66.md)
+ - slub() 복습 (kmem_cache_init(), percpu_init_late(), vmalloc_init())
+* 66th (2014/08/16) week: [66차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_66.md)
  - mm_init() 복습;
  - buddy 까지 복습 (mem_init())
-* 65th (2014/08/09) week study : [65차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_65.md)
+* 65th (2014/08/09) week: [65차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_65.md)
  - start_kernel()-> mm_init()-> vmalloc_init();
  - vmlist에 등록된 vm struct 들을 slab으로 이관하고 RB Tree로 구성
-* 64th (2014/07/26) week study : [64차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_64.md)
+* 64th (2014/07/26) week: [64차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_64.md)
  - start_kernel()-> mm_init()-> kmem_cache_init()
  - start_kernel()-> mm_init()-> percpu_init_late()
  - start_kernel()-> mm_init()-> pgtable_cache_init()
-* 63th (2014/07/19) week study : [63차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_63.md)
+* 63th (2014/07/19) week: [63차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_63.md)
  - mm_init()->kmem_cache_init()->bootstrab(&boot_kmem_cache_node) 
-* 62th (2014/07/12) week study : [62차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_62.md)
+* 62th (2014/07/12) week: [62차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_62.md)
  - mm_init()->kmem_cache_init()->bootstrab(&boot_kmem_cache) 
-* 61th (2014/07/05) week study : [61차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_61.md)
-* 60th (2014/06/28) week study : [60차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_60.md)
-* 59th (2014/06/21) week study : [59차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_59.md)
-* 58th (2014/06/14) week study : [58차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_58.md)
+* 61th (2014/07/05) week: [61차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_61.md)
+* 60th (2014/06/28) week: [60차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_60.md)
+* 59th (2014/06/21) week: [59차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_59.md)
+* 58th (2014/06/14) week: [58차](https://github.com/arm10c/linux-stable/blob/master/Reference/88_Review/a10c_58.md)
 
 ...
 
