@@ -1,6 +1,9 @@
 #IAMROOT.ORG Kernel스터디10차(ARM)
 
 #HISTORY
+* 78th (2014/11/15) week: [78차](https://github.com/hephaex/kernel_review/blob/master/a10c_78.md)
+ - init_IRQ()
+ - radix-tree() 알고리즘
 * 77th (2014/11/08) week: [77차](https://github.com/hephaex/kernel_review/blob/master/a10c_77.md)
  - init_IRQ()
 * 76th (2014/11/01) week: [76차](https://github.com/hephaex/kernel_review/blob/master/a10c_76.md)
