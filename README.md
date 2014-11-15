@@ -29,19 +29,19 @@
  - sched_init()->plist_head_init()
  - sched_init()->init_idle()
  - sched_init()->zalloc_cpumask_var()
-* 68th (2014/08/30) week: [68차](https://github.com/hephaex/kernel_review/blob/master/a10c_68.md)
+- 68th (2014/08/30) week: [68차](https://github.com/hephaex/kernel_review/blob/master/a10c_68.md)
  - sched_init()
  - rq 설정 (for_each_possible_cpu(i))
-* 67th (2014/08/23) week: [67차](https://github.com/hephaex/kernel_review/blob/master/a10c_67.md)
+- 67th (2014/08/23) week: [67차](https://github.com/hephaex/kernel_review/blob/master/a10c_67.md)
  - mm_init() 복습
  - slub() 복습 (kmem_cache_init(), percpu_init_late(), vmalloc_init())
-* 66th (2014/08/16) week: [66차](https://github.com/hephaex/kernel_review/blob/master/a10c_66.md)
+- 66th (2014/08/16) week: [66차](https://github.com/hephaex/kernel_review/blob/master/a10c_66.md)
  - mm_init() 복습;
  - buddy 까지 복습 (mem_init())
-* 65th (2014/08/09) week: [65차](https://github.com/hephaex/kernel_review/blob/master/a10c_65.md)
+- 65th (2014/08/09) week: [65차](https://github.com/hephaex/kernel_review/blob/master/a10c_65.md)
  - start_kernel()-> mm_init()-> vmalloc_init();
  - vmlist에 등록된 vm struct 들을 slab으로 이관하고 RB Tree로 구성
-* 64th (2014/07/26) week: [64차](https://github.com/hephaex/kernel_review/blob/master/a10c_64.md)
+- 64th (2014/07/26) week: [64차](https://github.com/hephaex/kernel_review/blob/master/a10c_64.md)
  - start_kernel()-> mm_init()-> kmem_cache_init()
  - start_kernel()-> mm_init()-> percpu_init_late()
  - start_kernel()-> mm_init()-> pgtable_cache_init()
@@ -51,12 +51,12 @@
  - mm_init()->kmem_cache_init()->bootstrab(&boot_kmem_cache) 
 * 61th (2014/07/05) week: [61차](https://github.com/hephaex/kernel_review/blob/master/a10c_61.md)
 * 60th (2014/06/28) week: [60차](https://github.com/hephaex/kernel_review/blob/master/a10c_60.md)
-* 59th (2014/06/21) week: [59차]
-* 58th (2014/06/14) week: [58차]
+* 59th (2014/06/21) week: [59차](https://github.com/hephaex/kernel_review/blob/master/a10c_59.md)
+* 58th (2014/06/14) week: [58차](https://github.com/hephaex/kernel_review/blob/master/a10c_58.md)
 
 ...
 
-* 12th (2012-07-13) week study : [12차 스터디](http://www.iamroot.org/xe/index.php?_filter=search&mid=Kernel_10_ARM&search_keyword=13&search_target=title&page=3&document_srl=176125) 15명
+* 12th (2012-07-13) week study : [12차 스터디](https://github.com/hephaex/kernel_review/blob/master/a10c_12.md)
  - arch/arm/boot/compressed/head.S
  - restart 진입 후 LC0값 로드
 * 11th (2012-07-06) week study : [11차 스터디](http://www.iamroot.org/xe/index.php?mid=Kernel_10_ARM&category=172676&page=6&document_srl=174738) 18+2명
