@@ -117,6 +117,7 @@ void __init init_IRQ(void)
 {
 	if (IS_ENABLED(CONFIG_OF) && !machine_desc->init_irq)
 		irqchip_init();
+	        // gic, combiner 인터럽트를 설정함. 
 	else
 		machine_desc->init_irq();
 }

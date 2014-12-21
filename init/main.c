@@ -693,6 +693,8 @@ asmlinkage void __init start_kernel(void)
 	/* init some links before init_ISA_irqs() */
 	early_irq_init();
 	init_IRQ();
+        // gic, combiner에 사용할 메모리 할당과 자료 구조 설정.
+        // gic:IRQ[0:15], combiner:IRQ[32:63] 에 대한 인터럽트 활성화(enable)
 	tick_init();
 	init_timers();
 	hrtimers_init();

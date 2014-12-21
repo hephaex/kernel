@@ -450,7 +450,11 @@ void __init of_irq_init(const struct of_device_id *matches)
 		if (desc->interrupt_parent == np)
 			desc->interrupt_parent = NULL;
 		list_add_tail(&desc->list, &intc_desc_list);
+		// 1: desc 자료에서 gic의 initc_desc구조체를 설정
+		// 2: desc 리스트에서 combiner의 initc_desc 구조체 연결
 	}
+        // 처음에는 desc->_intterupt_parrent 리스트에 gic, combiner가 있었고, 
+	// 
 
 	/*
 	 * The root irq controller is the one without an interrupt-parent.
@@ -505,11 +509,18 @@ void __init of_irq_init(const struct of_device_id *matches)
 			break;
 		}
 		list_del(&desc->list);
+		// init_parrent_desc에서 gic에 대한 자료 제거
+		// init_parrent_desc에서 combiner에 대한 자료 제거 
+
 		parent = desc->dev;
+                // 처음에는 gic에서 다음은 combiner로 순차대로 설정하기 위해서 리스트 위치 이동
 		kfree(desc);
+                // desc에 있던 irq관련 gic, combiner에 대한 메모리 제거 
 	}
 
 	list_for_each_entry_safe(desc, temp_desc, &intc_parent_list, list) {
+	// desc->list를 지우거나 변경을 하면 list_for_each_entry_safe()를 사용한다. 
+        // 여기서는 위에서 두개 리스트(gic, combiner)가 제거 되었기 때문에 그냥 패스한다. 
 		list_del(&desc->list);
 		kfree(desc);
 	}

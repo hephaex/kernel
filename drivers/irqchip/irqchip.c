@@ -27,4 +27,7 @@ extern struct of_device_id __irqchip_begin[];
 void __init irqchip_init(void)
 {
 	of_irq_init(__irqchip_begin);
+	// desc->list에 gic, combiner 에 대한 자료 구조를 만들어 주고,
+	// gic_of_init(), combiner_init()을 실행해서 각각의 IRQ에 대한 메모리, 설정을 해준다. 
+        // 설정한 이후 desc->list는 프리로 하고, irq_enable한다. 
 }
