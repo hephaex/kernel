@@ -159,17 +159,35 @@ ENDPROC(__und_invalid)
  SPFIX(	tst	sp, #4		)
 #endif
  SPFIX(	subeq	sp, sp, #4	)
-	stmia	sp, {r1 - r12}
+	stmia	sp, {r1 - r12}		@ sdmfs sp!, {r0 - r12} 로 변경
 
-	ldmia	r0, {r3 - r5}
+	ldmia	r0, {r3 - r5}		@ r0: &(stk->irq[0])
+					@ r3, r4, r5에 저장됨.
+					@ r3: IRQ 걸릴때 R0
+					@ R4: IRQ 복귀주소 LR
+					@ R5: IRQ 걸릴때 CPSR
+					// S_SP:52 (13x4) 
 	add	r7, sp, #S_SP - 4	@ here for interlock avoidance
+					// r7: pt_regs의 sp가 저장되는 위치가 저장됨.
+					// r7: r1부터 12번째 r13이 sp의 위치가됨.(sp처음위치 -88)
+					// 
+					// IRQ가 걸리면 PC부터 R0~LR까지 저장하고,(.save)
+					// PT_REGS로 R1(SP) ~ R7(-88) PC CPSR...ARM_ORGI_R0를 저장
+	
 	mov	r6, #-1			@  ""  ""      ""       ""
+					// r6: -1
 	add	r2, sp, #(S_FRAME_SIZE + \stack_hole - 4)
+					// sp: sp의 처음위치 -136
+					// r2: 이전의 스택에 r0-pc 저장할 때 r0가 저장된 곳의 주소가 저장됨.
  SPFIX(	addeq	r2, r2, #4	)
+					// r2: 위에서 뺏으면(subed) 여기서 다시 더함.
 	str	r3, [sp, #-4]!		@ save the "real" r0 copied
 					@ from the exception stack
-
-	mov	r3, lr
+					// sp: sp처음위치 -140(sp 처음위치 -136)
+					// r3: irq걸릴때 r0,를 pt_regs의 r0위치에 저장.
+					// 
+	
+	mov	r3, lr			// lr: IRQ걸리기 전에 LR값(R14_SVC)가 R3에 저장
 
 	@
 	@ We are now ready to fill in the remaining blanks on the stack:
@@ -180,13 +198,61 @@ ENDPROC(__und_invalid)
 	@  r5 - spsr_<exception>
 	@  r6 - orig_r0 (see pt_regs definition in ptrace.h)
 	@
+	// pt_reqs의 남은 공간에 위에서 설정한 값을 저장함.
+        // r7: sp처음위치 -88
+	// r2: sp처음위치 -64, r3, R14_SVC, R4: R14_IRQ복귀주소, R5: IRQ발생시 CPSR값, R6: -1
 	stmia	r7, {r2 - r6}
+	// *(sp 처음위치 -88) : SP 처음위치 -64
+	// *(sp 처음위치 -84) : R14_SVC
+	// *(sp 처음위치 -80) : R14_IRQ
+	// *(sp 처음위치 -76) : IRQ 발생시 CPSR
+	// *(sp 처음위치 -72) : -1
 
-#ifdef CONFIG_TRACE_IRQFLAGS
+
+#ifdef CONFIG_TRACE_IRQFLAGS // not found
 	bl	trace_hardirqs_off
 #endif
 	.endm
 
+/*
+// SVC_ENTRY가 한일.
+// |-------------------| 	
+// |  PC               |
+// |-------------------| 	
+// |  LR               |
+// |-------------------|
+// |  ...              | 	
+// |-------------------| 	
+// |  R1               |
+// |-------------------| 	
+// |  R0               |  .save
+// |-------------------| 	
+// |-------------------| 	  -|  PT_REGS
+// |  -1               |           |
+// |-------------------|           | 
+// |  IRQ발생시 CPSR값 |
+// |-------------------|
+// |  R14_irq: 복귀주소|
+// |-------------------|
+// |  R14_svc:         |
+// |-------------------|
+// |  sp 처음위치 - 64 |  <-- R7
+// |-------------------|
+// |  R12              |
+// |-------------------|
+// |  R11              |
+// |-------------------|
+// |  ...              |
+// |-------------------|
+// |  R3               |
+// |-------------------|
+// |  R2               |
+// |-------------------|
+// |  R1               |            |
+// |-------------------|            |
+// |  k_R0             |   <-- SP  -|
+// |-------------------|
+*/	
 	.align	5
 __dabt_svc:
 	svc_entry
