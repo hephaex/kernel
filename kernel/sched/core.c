@@ -2442,7 +2442,7 @@ notrace unsigned long get_parent_ip(unsigned long addr)
 // ARM10C 20130907
 // ARM10C 20140315
 // ARM10C 20140920
-// a10c 4361
+// a10c 4361 val: 0x200
 void __kprobes preempt_count_add(int val)
 {
 #ifdef CONFIG_DEBUG_PREEMPT // ARM10C Y 
@@ -2454,6 +2454,7 @@ void __kprobes preempt_count_add(int val)
 		return;
 #endif
 	// preempt_count(): 0x40000001
+	// val: 0x200
 	__preempt_count_add(val);
 	// preempt_count(): 0x40000001 + 1(val)
 

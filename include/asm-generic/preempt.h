@@ -14,6 +14,7 @@ static __always_inline int preempt_count(void)
 	return current_thread_info()->preempt_count;
 }
 
+// a10c 4361
 static __always_inline int *preempt_count_ptr(void)
 {
 	return &current_thread_info()->preempt_count;
@@ -63,6 +64,7 @@ static __always_inline bool test_preempt_need_resched(void)
  * The various preempt_count add/sub methods
  */
 
+// a10c 4361
 static __always_inline void __preempt_count_add(int val)
 {
 	*preempt_count_ptr() += val;
