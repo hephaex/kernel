@@ -663,6 +663,7 @@ void rcu_user_exit(void)
  *
  * You have been warned.
  */
+// a10c 4361
 void rcu_irq_enter(void)
 {
 	unsigned long flags;
@@ -670,15 +671,23 @@ void rcu_irq_enter(void)
 	long long oldval;
 
 	local_irq_save(flags);
+	// flags에 CPSR값 저장
+
 	rdtp = this_cpu_ptr(&rcu_dynticks);
+	// rdtp: cpu0의 &rcu_dynticks
+
 	oldval = rdtp->dynticks_nesting;
+	// oldval: (cpu0의 &rcu_dynticks)->dynticks_nesting
+	// DYNTICK_TASK_EXIT_IDLE: 0x140000000000000
 	rdtp->dynticks_nesting++;
+	// DYNTICK_TASK_EXIT_IDLE: 0x140000000000001
 	WARN_ON_ONCE(rdtp->dynticks_nesting == 0);
 	if (oldval)
 		trace_rcu_dyntick(TPS("++="), oldval, rdtp->dynticks_nesting);
+	        // null function
 	else
 		rcu_eqs_exit_common(rdtp, oldval, true);
-	rcu_sysidle_exit(rdtp, 1);
+	rcu_sysidle_exit(rdtp, 1); // null fuction
 	local_irq_restore(flags);
 }
 

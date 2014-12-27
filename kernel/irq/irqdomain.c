@@ -527,6 +527,8 @@ EXPORT_SYMBOL_GPL(irq_dispose_mapping);
  * @domain: domain owning this hardware interrupt
  * @hwirq: hardware irq number in that domain space
  */
+// 4361
+// gic->domain: (&gp
 unsigned int irq_find_mapping(struct irq_domain *domain,
 			      irq_hw_number_t hwirq)
 {

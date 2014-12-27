@@ -37,10 +37,12 @@
  */
 	.macro	irq_handler
 #ifdef CONFIG_MULTI_IRQ_HANDLER
-	ldr	r1, =handle_arch_irq
-	mov	r0, sp
-	adr	lr, BSYM(9997f)
-	ldr	pc, [r1]
+						// r1: handle_arch_irq: gic_handle_irq
+	ldr	r1, =handle_arch_irq    	// r1: gic_handle_irq
+	mov	r0, sp				// sp: sp처음위치-140
+						// r0: sp 처음위치-140 
+	adr	lr, BSYM(9997f)			// lr: 9997의 상대주소값
+	ldr	pc, [r1]			// pc: gic_hangle_irq()로 이동.
 #else
 	arch_irq_handler_default
 #endif
@@ -234,23 +236,23 @@ ENDPROC(__und_invalid)
 // |-------------------|
 // |  R14_irq: 복귀주소|
 // |-------------------|
-// |  R14_svc:         |
+// |  IRQ발생시R14_svc |
 // |-------------------|
 // |  sp 처음위치 - 64 |  <-- R7
 // |-------------------|
-// |  R12              |
+// |  IRQ발생시R12     |
 // |-------------------|
-// |  R11              |
+// |  IRQ발생시R11     |
 // |-------------------|
 // |  ...              |
 // |-------------------|
-// |  R3               |
+// |  IRQ발생시R3      |
 // |-------------------|
-// |  R2               |
+// |  IRQ발생시R2      |
 // |-------------------|
-// |  R1               |            |
+// |  IRQ발생시R1      |            |
 // |-------------------|            |
-// |  k_R0             |   <-- SP  -|
+// |  IRQ발생시k_R0    |   <-- SP  -|
 // |-------------------|
 */	
 	.align	5

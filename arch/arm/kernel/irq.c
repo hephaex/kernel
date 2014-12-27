@@ -62,6 +62,7 @@ int arch_show_interrupts(struct seq_file *p, int prec)
  * own 'handler'.  Used by platform code implementing C-based 1st
  * level decoding.
  */
+// 4361
 void handle_IRQ(unsigned int irq, struct pt_regs *regs)
 {
 	struct pt_regs *old_regs = set_irq_regs(regs);

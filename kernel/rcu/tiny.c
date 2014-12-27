@@ -51,6 +51,7 @@ static void __call_rcu(struct rcu_head *head,
 		       void (*func)(struct rcu_head *rcu),
 		       struct rcu_ctrlblk *rcp);
 
+// a10c 4361
 static long long rcu_dynticks_nesting = DYNTICK_TASK_EXIT_IDLE;
 
 #include "tiny_plugin.h"

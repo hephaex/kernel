@@ -65,6 +65,9 @@
 #define HARDIRQ_OFFSET	(1UL << HARDIRQ_SHIFT)
 #define NMI_OFFSET	(1UL << NMI_SHIFT)
 
+// a10c 4361
+// SOFTIRQ_OFFSET: 0x100
+// SOFTIRQ_DISABLE_OFFSET: 0x200
 #define SOFTIRQ_DISABLE_OFFSET	(2 * SOFTIRQ_OFFSET)
 
 #define PREEMPT_ACTIVE_BITS	1
@@ -92,6 +95,7 @@
 #define in_irq()		(hardirq_count())
 #define in_softirq()		(softirq_count())
 // ARM10C 20140315
+// a10c 4361
 // in_interrupt() : 0
 #define in_interrupt()		(irq_count())
 #define in_serving_softirq()	(softirq_count() & SOFTIRQ_OFFSET)

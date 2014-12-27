@@ -358,6 +358,7 @@ TRACE_EVENT(rcu_fqs,
  * events use the upper bits of each number, while interrupt-related
  * events use the lower bits.
  */
+// a10c 4361
 TRACE_EVENT(rcu_dyntick,
 
 	TP_PROTO(const char *polarity, long long oldnesting, long long newnesting),

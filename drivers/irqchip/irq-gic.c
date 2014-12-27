@@ -53,6 +53,7 @@ union gic_base {
 	void __percpu __iomem **percpu_base;
 };
 
+// arm10c_4361
 struct gic_chip_data {
 	union gic_base dist_base;
 	union gic_base cpu_base;
@@ -279,18 +280,30 @@ static int gic_set_wake(struct irq_data *d, unsigned int on)
 #define gic_set_wake	NULL
 #endif
 
+// regs: svc_entry에서 만든 strust 구조체의 주소
+// exynos EXIT[15] 인터럽트가 발생하여 enxption이 수행했다고 가정함.  
 static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs)
 {
 	u32 irqstat, irqnr;
 	struct gic_chip_data *gic = &gic_data[0];
+	// gic: &gic_data[0]: 0xf0002000
 	void __iomem *cpu_base = gic_data_cpu_base(gic);
-
+	// gic_data_cpu_base(gic): gic_data_cpu_base(&gic_data[0])
+	// 
 	do {
-		irqstat = readl_relaxed(cpu_base + GIC_CPU_INTACK);
-		irqnr = irqstat & ~0x1c00;
 
+	        // G.A.S: 4.4.4 Interrupt Acknowledge Register, GICC_IAR
+        	// GIC_CPU_INTACK: 0x0c , cpu_base: 0xf0002000
+		irqstat = readl_relaxed(cpu_base + GIC_CPU_INTACK);
+		// irqstart: readl_relaxed(0xf000200c): 0x3f
+		irqnr = irqstat & ~0x1c00;
+		// irqstart: 0x3f
+
+		// 
 		if (likely(irqnr > 15 && irqnr < 1021)) {
+		  // gic_data[0]
 			irqnr = irq_find_mapping(gic->domain, irqnr);
+			// irqnr: 0x3f(64)
 			handle_IRQ(irqnr, regs);
 			continue;
 		}

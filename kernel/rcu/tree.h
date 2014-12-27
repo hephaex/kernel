@@ -103,6 +103,7 @@ extern int rcu_num_nodes;
 /*
  * Dynticks per-CPU state.
  */
+// 4361
 struct rcu_dynticks {
 	long long dynticks_nesting; /* Track irq/process nesting level. */
 				    /* Process level is worth LLONG_MAX/2. */

@@ -274,6 +274,7 @@ extern unsigned long __per_cpu_offset[NR_CPUS];
 // })
 // ARM10C 20140510
 // zone->pageset: contig_page_data->node_zones[0].pageset
+// a10c 4361
 #define this_cpu_ptr(ptr) SHIFT_PERCPU_PTR(ptr, my_cpu_offset)
 #else
 #define this_cpu_ptr(ptr) __this_cpu_ptr(ptr)

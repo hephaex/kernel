@@ -2906,6 +2906,7 @@ static void rcu_sysidle_enter(struct rcu_dynticks *rdtp, int irq)
 {
 }
 
+// a10c 4361
 static void rcu_sysidle_exit(struct rcu_dynticks *rdtp, int irq)
 {
 }

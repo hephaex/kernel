@@ -118,6 +118,7 @@ static void __local_bh_disable(unsigned long ip, unsigned int cnt)
 		trace_preempt_off(CALLER_ADDR0, get_parent_ip(CALLER_ADDR1));
 }
 #else /* !CONFIG_TRACE_IRQFLAGS */
+// a10c 4361
 static inline void __local_bh_disable(unsigned long ip, unsigned int cnt)
 {
 	preempt_count_add(cnt);
@@ -125,8 +126,10 @@ static inline void __local_bh_disable(unsigned long ip, unsigned int cnt)
 }
 #endif /* CONFIG_TRACE_IRQFLAGS */
 
+// a10c 4361
 void local_bh_disable(void)
 {
+  // SOFTIRQ_DISABLE_OFFSET: 0x200
 	__local_bh_disable(_RET_IP_, SOFTIRQ_DISABLE_OFFSET);
 }
 
@@ -317,6 +320,7 @@ void irq_enter(void)
 	int cpu = smp_processor_id();
 
 	rcu_irq_enter();
+	// is_idle_task(): 1 && in_interrupt: 0
 	if (is_idle_task(current) && !in_interrupt()) {
 		/*
 		 * Prevent raise_softirq from needlessly waking up ksoftirqd
