@@ -108,23 +108,23 @@ enum exynos5420_plls {
 };
 
 enum exynos5420_clks {
-	none,
+        none,    // 0 
 
 	/* core clocks */
-	fin_pll,  fout_apll, fout_cpll, fout_dpll, fout_epll, fout_rpll,
-	fout_ipll, fout_spll, fout_vpll, fout_mpll, fout_bpll, fout_kpll,
+	fin_pll,  fout_apll, fout_cpll, fout_dpll, fout_epll, fout_rpll, // 6
+	fout_ipll, fout_spll, fout_vpll, fout_mpll, fout_bpll, fout_kpll, // 12
 
 	/* gate for special clocks (sclk) */
-	sclk_uart0 = 128, sclk_uart1, sclk_uart2, sclk_uart3, sclk_mmc0,
-	sclk_mmc1, sclk_mmc2, sclk_spi0, sclk_spi1, sclk_spi2, sclk_i2s1,
-	sclk_i2s2, sclk_pcm1, sclk_pcm2, sclk_spdif, sclk_hdmi, sclk_pixel,
-	sclk_dp1, sclk_mipi1, sclk_fimd1, sclk_maudio0, sclk_maupcm0,
-	sclk_usbd300, sclk_usbd301, sclk_usbphy300, sclk_usbphy301, sclk_unipro,
-	sclk_pwm, sclk_gscl_wa, sclk_gscl_wb, sclk_hdmiphy,
+	sclk_uart0 = 128, sclk_uart1, sclk_uart2, sclk_uart3, sclk_mmc0, // 132
+	sclk_mmc1, sclk_mmc2, sclk_spi0, sclk_spi1, sclk_spi2, sclk_i2s1, // 138
+	sclk_i2s2, sclk_pcm1, sclk_pcm2, sclk_spdif, sclk_hdmi, sclk_pixel, // 144
+	sclk_dp1, sclk_mipi1, sclk_fimd1, sclk_maudio0, sclk_maupcm0,       // 149
+	sclk_usbd300, sclk_usbd301, sclk_usbphy300, sclk_usbphy301, sclk_unipro, // 154
+	sclk_pwm, sclk_gscl_wa, sclk_gscl_wb, sclk_hdmiphy,                 // 158
 
 	/* gate clocks */
-	aclk66_peric = 256, uart0, uart1, uart2, uart3, i2c0, i2c1, i2c2, i2c3,
-	i2c4, i2c5, i2c6, i2c7, i2c_hdmi, tsadc, spi0, spi1, spi2, keyif, i2s1,
+	aclk66_peric = 256, uart0, uart1, uart2, uart3, i2c0, i2c1, i2c2, i2c3, // 263
+	i2c4, i2c5, i2c6, i2c7, i2c_hdmi, tsadc, spi0, spi1, spi2, keyif, i2s1, // 
 	i2s2, pcm1, pcm2, pwm, spdif, i2c8, i2c9, i2c10, aclk66_psgen = 300,
 	chipid, sysreg, tzpc0, tzpc1, tzpc2, tzpc3, tzpc4, tzpc5, tzpc6, tzpc7,
 	tzpc8, tzpc9, hdmi_cec, seckey, mct, wdt, rtc, tmu, tmu_gpu,
@@ -146,7 +146,7 @@ enum exynos5420_clks {
 	/* divider clocks */
 	dout_pixel = 768,
 
-	nr_clks,
+	nr_clks, // 769
 };
 
 /*
@@ -776,10 +776,15 @@ static void __init exynos5420_clk_init(struct device_node *np)
 	} else {
 		panic("%s: unable to determine soc\n", __func__);
 	}
-
+  
+        // np: devtree에서 찾은 clock node 주소
+	// nr_clks: 769
+	// exynos5420_clk_regs:
+        // ARRAY_SIZE(exynos5420_clk_regs): 59
 	samsung_clk_init(np, reg_base, nr_clks,
 			exynos5420_clk_regs, ARRAY_SIZE(exynos5420_clk_regs),
 			NULL, 0);
+	// 
 	samsung_clk_of_register_fixed_ext(exynos5420_fixed_rate_ext_clks,
 			ARRAY_SIZE(exynos5420_fixed_rate_ext_clks),
 			ext_clk_match);

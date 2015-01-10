@@ -21,8 +21,12 @@ static DEFINE_MUTEX(syscore_ops_lock);
 void register_syscore_ops(struct syscore_ops *ops)
 {
 	mutex_lock(&syscore_ops_lock);
+        // syscore_ops_lock으로 mutex lock실행
+
 	list_add_tail(&ops->node, &syscore_ops_list);
+        // &ops->node: (&samsung_clk_syscore_ops)->node를 추가. 
 	mutex_unlock(&syscore_ops_lock);
+        // syscore_ops_lock으로 mutex unlock실행
 }
 EXPORT_SYMBOL_GPL(register_syscore_ops);
 

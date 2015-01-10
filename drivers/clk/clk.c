@@ -2147,17 +2147,24 @@ int of_clk_add_provider(struct device_node *np,
 	struct of_clk_provider *cp;
 
 	cp = kzalloc(sizeof(struct of_clk_provider), GFP_KERNEL);
+	// sizeof(struct of_clk_provider): 20B, GFP_KERNEL: 0xD0
+        // cp: kmem_cache#30-oX (32B)
+
 	if (!cp)
 		return -ENOMEM;
 
 	cp->node = of_node_get(np);
+	// cp->node: (kmem_cache#30-oX)->node에서 찾은 dtb주소
 	cp->data = data;
+	// cp->data: (kmem_cache#30-oX)->data: &clk_data
 	cp->get = clk_src_get;
+	// cp->get: (kmem_cache#30-oX)->get: clk_src_get
 
 	mutex_lock(&of_clk_lock);
 	list_add(&cp->link, &of_clk_providers);
 	mutex_unlock(&of_clk_lock);
 	pr_debug("Added clock from %s\n", np->full_name);
+	// np->full_name: "/clock-controller@10010000"
 
 	return 0;
 }

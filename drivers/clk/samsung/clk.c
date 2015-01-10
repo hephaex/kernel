@@ -57,22 +57,30 @@ void __init samsung_clk_init(struct device_node *np, void __iomem *base,
 		unsigned long nr_rdump, unsigned long *soc_rdump,
 		unsigned long nr_soc_rdump)
 {
+        // base: 0xf0040000
 	reg_base = base;
+        // reg_base: 0xf0040000
 
-#ifdef CONFIG_PM_SLEEP
+#ifdef CONFIG_PM_SLEEP // CONFIG_PM_SLEEP=y
 	if (rdump && nr_rdump) {
 		unsigned int idx;
 		reg_dump = kzalloc(sizeof(struct samsung_clk_reg_dump)
 				* (nr_rdump + nr_soc_rdump), GFP_KERNEL);
+		// reg_dump: 472size이므로 kmem_cache#26-oX(512B)를 할당 받음.
 		if (!reg_dump) {
 			pr_err("%s: memory alloc for register dump failed\n",
 					__func__);
 			return;
 		}
 
+		// nr_rdump: 59
 		for (idx = 0; idx < nr_rdump; idx++)
+		        // idx:0 reg_dump[0].offset: (kmem_cach#26-oX)[0].offset, 
+		        // rdump[0]: exynos5420_clk_regs[0] 
 			reg_dump[idx].offset = rdump[idx];
+		// idx: 1...58까지 반복 실행
 		for (idx = 0; idx < nr_soc_rdump; idx++)
+		        // nr_rdump:59, idx: nr_soc_rdump: 0 
 			reg_dump[nr_rdump + idx].offset = soc_rdump[idx];
 		nr_reg_dump = nr_rdump + nr_soc_rdump;
 		register_syscore_ops(&samsung_clk_syscore_ops);
@@ -80,15 +88,21 @@ void __init samsung_clk_init(struct device_node *np, void __iomem *base,
 #endif
 
 	clk_table = kzalloc(sizeof(struct clk *) * nr_clks, GFP_KERNEL);
+	// clk_table: 4 * 59: 3076, 4096B만큼 할당 받는다.
+        // clk_table: kmem_cache#23-oX(4096B)
 	if (!clk_table)
 		panic("could not allocate clock lookup table\n");
 
 	if (!np)
 		return;
 
-#ifdef CONFIG_OF
+#ifdef CONFIG_OF // CONFIG_OF=y
 	clk_data.clks = clk_table;
+	// clk_data.clks: kmem_cache#23-o0 (clk_table)
+
 	clk_data.clk_num = nr_clks;
+	// clk_data.clk_num: 769
+
 	of_clk_add_provider(np, of_clk_src_onecell_get, &clk_data);
 #endif
 }
@@ -294,6 +308,8 @@ void __init samsung_clk_of_register_fixed_ext(
 	struct device_node *np;
 	u32 freq;
 
+	// clk_matches: ext_clk_match: "samsung,exynos5420-oscclk", 
+	// np: dtb에서 찾은 fixed-rate_clocks 노드 주소
 	for_each_matching_node_and_match(np, clk_matches, &match) {
 		if (of_property_read_u32(np, "clock-frequency", &freq))
 			continue;
