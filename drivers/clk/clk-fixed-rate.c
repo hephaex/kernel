@@ -63,14 +63,22 @@ struct clk *clk_register_fixed_rate(struct device *dev, const char *name,
 	}
 
 	init.name = name;
+	// init.name: "fin_pll"
 	init.ops = &clk_fixed_rate_ops;
+	// init.ops: &clk_fixed_rate_ops
 	init.flags = flags | CLK_IS_BASIC;
+	// init.flags: flags: 0x10, CLK_IS_BASIC: 0x20
+	// init.flags: 0x30
 	init.parent_names = (parent_name ? &parent_name: NULL);
+	// init.parent_names: NULL
 	init.num_parents = (parent_name ? 1 : 0);
+	// init.num_parrents: 0
 
 	/* struct clk_fixed_rate assignments */
 	fixed->fixed_rate = fixed_rate;
+	// fixed->fixed_rate: (kmem_cache#30-oX)->fixed_rate: 24000000
 	fixed->hw.init = &init;
+	// fixed->hw.init: (kmem_cache#30-oX)->hw.init: &init
 
 	/* register the clock */
 	clk = clk_register(dev, &fixed->hw);

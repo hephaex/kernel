@@ -310,9 +310,11 @@ void __init samsung_clk_of_register_fixed_ext(
 
 	// clk_matches: ext_clk_match: "samsung,exynos5420-oscclk", 
 	// np: dtb에서 찾은 fixed-rate_clocks 노드 주소
+	// match: ext_clk_match[0]
 	for_each_matching_node_and_match(np, clk_matches, &match) {
 		if (of_property_read_u32(np, "clock-frequency", &freq))
 			continue;
+		// freq: 24000000 (24MHz)
 		fixed_rate_clk[(u32)match->data].fixed_rate = freq;
 	}
 	samsung_clk_register_fixed_rate(fixed_rate_clk, nr_fixed_rate_clk);
