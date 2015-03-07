@@ -2255,7 +2255,16 @@ void __init of_clk_init(const struct of_device_id *matches)
 		matches = __clk_of_table;
 
 	for_each_matching_node_and_match(np, matches, &match) {
-		of_clk_init_cb_t clk_init_cb = match->data;
+        // for (np = of_find_matching_node_and_match(NULL, matches, &match);                                                                                                  
+	//      np; np = of_find_matching_node_and_match(np, matches, &match))                                                                                                
+
+	// np: devtree에서 allnext로 순회 하면서 찾은 clock node의 주소, match: __clk_of_table_exynos5420_clk                                                         
+	        
+		// match->data: __clk_of_table_exynos5420_clk.data: exynos5420_clk_init
+	        of_clk_init_cb_t clk_init_cb = match->data;
+		// clk_init_cb: exynos5420_clk_init
+		
+		// exynos5420_clk_init(devtree에서 allnext로 순회 하면서 찾은 clock node의 주소)
 		clk_init_cb(np);
 	}
 }
