@@ -220,8 +220,15 @@ int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq)
 				 * be32_to_cpup(imap): 
 				 */
 				newpar = of_find_node_by_phandle(be32_to_cpup(imap));
+			        /* newpar: exynos5420 dtb상의 combiner node의 주소 */
+			/* imap: mct_map node의 interrupt_map의 property 값의 주소+ 4
+			 * imaplen: 31
+			 */
 			imap++;
 			--imaplen;
+			/* imap: mct_map node의 interrupt_map의 property 값의 주소+ 8
+			 * imaplen: 30
+			 */
 
 			/* Check if not found */
 			if (newpar == NULL) {
@@ -232,11 +239,15 @@ int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq)
 			/* Get #interrupt-cells and #address-cells of new
 			 * parent
 			 */
+			/* newpar: exynos5420 dtb상의 conbiner node의 주소
+			 * 
+			 */
 			tmp = of_get_property(newpar, "#interrupt-cells", NULL);
 			if (tmp == NULL) {
 				pr_debug(" -> parent lacks #interrupt-cells!\n");
 				goto fail;
 			}
+			/* newinitsize: 2, newaddrsize: 0 */
 			newintsize = be32_to_cpu(*tmp);
 			tmp = of_get_property(newpar, "#address-cells", NULL);
 			newaddrsize = (tmp == NULL) ? 0 : be32_to_cpu(*tmp);
