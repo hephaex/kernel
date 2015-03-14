@@ -1,6 +1,8 @@
 #IAMROOT.ORG Kernel스터디10차(ARM)
 
 #HISTORY
+* 81th (2014/12/06) week: [81차 분석](https://github.com/hephaex/kernel_review/blob/master/a10c_81.md)
+ - init_IRQ()->...->kfree()
 * 80th (2014/11/29) week: [80차](https://github.com/hephaex/kernel_review/blob/master/a10c_80.md)
  - init_IRQ()->...->gic_of_init()->gic_of_bases()
  - irqchip_init()
