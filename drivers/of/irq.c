@@ -198,14 +198,27 @@ int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq)
 			/* Compare specifiers */
 			match = 1;
 			for (i = 0; i < (addrsize + intsize); i++, imaplen--)
+			  /* match: 1, addrsize: 0, inisize: 1, imaplen: 32 
+			   * imap: mct_map node의 interrupt_map의 property 값의 주소): 0
+			   * imask[0]: dummy_imask[0]: 0xffffffff
+			   */
 				match &= !((match_array[i] ^ *imap++) & imask[i]);
+			        /* match: 0  */
 
+			/* imaplen: 31, 
+			 * imap: mct_map node의 interrupt_map의 property 값의 주소+ 4
+			 */
 			pr_debug(" -> match=%d (imaplen=%d)\n", match, imaplen);
+			/* " -> match=0 (imaplen=31)\n" */
 
 			/* Get the interrupt parent */
+			/* of_irq_workarounds :0, OF_IMAP_NO_PHANDLE: 0x00000002 */
 			if (of_irq_workarounds & OF_IMAP_NO_PHANDLE)
 				newpar = of_node_get(of_irq_dflt_pic);
 			else
+			        /* imap: mct_map node의 interrupt_map의 property 값의 주소+ 4
+				 * be32_to_cpup(imap): 
+				 */
 				newpar = of_find_node_by_phandle(be32_to_cpup(imap));
 			imap++;
 			--imaplen;
