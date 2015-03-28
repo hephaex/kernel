@@ -92,7 +92,7 @@ int clk_notifier_unregister(struct clk *clk, struct notifier_block *nb);
  *
  * Must not be called from within atomic context.
  */
-#ifdef CONFIG_HAVE_CLK_PREPARE
+#ifdef CONFIG_HAVE_CLK_PREPARE 	/* CONFIG_HAVE_CLK_PREPARE=n */
 int clk_prepare(struct clk *clk);
 #else
 static inline int clk_prepare(struct clk *clk)
@@ -327,6 +327,9 @@ static inline struct clk *clk_get_parent(struct clk *clk)
 #endif
 
 /* clk_prepare_enable helps cases using clk_enable in non-atomic context. */
+/* 20150328 a10c
+ * 
+ */
 static inline int clk_prepare_enable(struct clk *clk)
 {
 	int ret;
@@ -334,6 +337,9 @@ static inline int clk_prepare_enable(struct clk *clk)
 	ret = clk_prepare(clk);
 	if (ret)
 		return ret;
+	/* 
+	 * clk: kmem_cache#29-oX (mct)
+	 */
 	ret = clk_enable(clk);
 	if (ret)
 		clk_unprepare(clk);

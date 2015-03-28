@@ -784,13 +784,23 @@ void clk_unprepare(struct clk *clk)
 }
 EXPORT_SYMBOL_GPL(clk_unprepare);
 
+/* 20150328 a10c 
+ * clk: kmem_cache#29-ox (mct)
+ */
 int __clk_prepare(struct clk *clk)
 {
 	int ret = 0;
 
+	/* 
+	 * clk: kmem_cache#29-oX (mct)
+	*/
 	if (!clk)
 		return 0;
 
+	/* 20150328 a10c 
+	 * clk->prepare_count: kmem_cache#29-ox (mct)->prepare_count
+	 */
+	
 	if (clk->prepare_count == 0) {
 		ret = __clk_prepare(clk->parent);
 		if (ret)
@@ -821,6 +831,9 @@ int __clk_prepare(struct clk *clk)
  * It is this reason that clk_prepare and clk_enable are not mutually
  * exclusive.  In fact clk_prepare must be called before clk_enable.
  * Returns 0 on success, -EERROR otherwise.
+ */
+/* 20150328 a10c 
+ * clk: kmem_cache#29-ox (mct)
  */
 int clk_prepare(struct clk *clk)
 {

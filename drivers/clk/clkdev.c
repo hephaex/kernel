@@ -54,6 +54,7 @@ EXPORT_SYMBOL(of_clk_get);
  * and uses them to look up the struct clk from the registered list of clock
  * providers.
  */
+/* 2015.03.28 A10C */
 struct clk *of_clk_get_by_name(struct device_node *np, const char *name)
 {
 	struct clk *clk = ERR_PTR(-ENOENT);
@@ -70,6 +71,9 @@ struct clk *of_clk_get_by_name(struct device_node *np, const char *name)
 		if (name)
 			index = of_property_match_string(np, "clock-names", name);
 		clk = of_clk_get(np, index);
+		/* 
+		 * clk: 
+		 */
 		if (!IS_ERR(clk))
 			break;
 		else if (name && index >= 0) {

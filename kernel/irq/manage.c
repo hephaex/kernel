@@ -162,15 +162,27 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
 	return ret;
 }
 
+/* 20150328 a10c 
+ * data: &(kem_cache#28-oX (irq 152))->irq-data
+ */
 int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
 {
+        /*
+	 * data: &(kem_cache#28-oX (irq 152))->irq_data
+	 * irq_data_get_irq_chip(&(kmem_cach#28-oX (irq 152))->irq_data
+	*/
 	struct irq_chip *chip = irq_data_get_irq_chip(data);
+	/* chip: &gic_chip */
 	struct irq_desc *desc = irq_data_to_desc(data);
+	/* desc: kem_cache#28-oX (irq 152) */
 	int ret = 0;
+	/* ret: 0 */
 
 	if (!chip || !chip->irq_set_affinity)
 		return -EINVAL;
 
+	/* 
+	 * data: &(kmem_cache#28-oX (irq 152) */
 	if (irq_can_move_pcntxt(data)) {
 		ret = irq_do_set_affinity(data, mask, false);
 	} else {
@@ -193,9 +205,16 @@ int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
  *	@mask:		cpumask
  *
  */
+/* 
+ * 20150328 a10c
+ * irq: 152
+ */
 int irq_set_affinity(unsigned int irq, const struct cpumask *mask)
 {
 	struct irq_desc *desc = irq_to_desc(irq);
+	/* 
+	 * desc: irq_to_desc(irq:152): irq 152 */
+
 	unsigned long flags;
 	int ret;
 
@@ -203,6 +222,9 @@ int irq_set_affinity(unsigned int irq, const struct cpumask *mask)
 		return -EINVAL;
 
 	raw_spin_lock_irqsave(&desc->lock, flags);
+	/* 
+	 * raw_spin_lock_irqsave(irq 152)->lock을 사용하여 spin lock을 걸고, cpsr를 flags에 저장
+	*/
 	ret =  __irq_set_affinity_locked(irq_desc_get_irq_data(desc), mask);
 	raw_spin_unlock_irqrestore(&desc->lock, flags);
 	return ret;

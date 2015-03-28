@@ -501,11 +501,17 @@ static void __init exynos4_timer_resources(struct device_node *np, void __iomem 
 	if (IS_ERR(mct_clk))
 		panic("%s: unable to retrieve mct clock instance\n", __func__);
 	clk_prepare_enable(mct_clk);
-
+	/* 
+	 * mct_prepare로 mct가 동작하기 위한 조건들을 실행하고.
+	 * mct_enable로 mct가 동작시킨다.
+	*/
 	reg_base = base;
 	if (!reg_base)
 		panic("%s: unable to ioremap mct address space\n", __func__);
 
+	/* 
+	 * mct_int_type: MCT_INT_SPI:0, MCT_INT_PPI:1
+	*/
 	if (mct_int_type == MCT_INT_PPI) {
 
 		err = request_percpu_irq(mct_irqs[MCT_L0_IRQ],
@@ -514,6 +520,9 @@ static void __init exynos4_timer_resources(struct device_node *np, void __iomem 
 		WARN(err, "MCT: can't request IRQ %d (%d)\n",
 		     mct_irqs[MCT_L0_IRQ], err);
 	} else {
+	        /*
+		 * mct_irqs[MCT_L0_IRQ: 5], mct_irqs[5]: 152, cpumask_of(0): 
+		 */
 		irq_set_affinity(mct_irqs[MCT_L0_IRQ], cpumask_of(0));
 	}
 
