@@ -585,6 +585,9 @@ unsigned long __clk_get_rate(struct clk *clk)
 {
 	unsigned long ret;
 
+	/* 
+	 * clk: 24000000 
+	 */
 	if (!clk) {
 		ret = 0;
 		goto out;

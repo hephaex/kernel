@@ -486,9 +486,16 @@ static void __init exynos4_timer_resources(struct device_node *np, void __iomem 
 
 	tick_clk = np ? of_clk_get_by_name(np, "fin_pll") :
 				clk_get(NULL, "fin_pll");
+	/* 
+	 * tick_clk: kmem_cache#29-oX (fin_pll)
+	 */
 	if (IS_ERR(tick_clk))
 		panic("%s: unable to determine tick clock rate\n", __func__);
+	
 	clk_rate = clk_get_rate(tick_clk);
+	/* 
+	 * clk_rate: clk_get_rate(kmem_cache#29-oX (fin_pll)) : 24000000
+	 */
 
 	mct_clk = np ? of_clk_get_by_name(np, "mct") : clk_get(NULL, "mct");
 	if (IS_ERR(mct_clk))
