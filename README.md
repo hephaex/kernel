@@ -1,6 +1,8 @@
 1#IAMROOT.ORG Kernel스터디10차(ARM)
 
 #HISTORY
+* 94th (2015/03/14) week [94차](https://github.com/hephaex/kernel_review/blob/master/a10c_94.md)
+ - start_kernel()->time_init()->clocksource_of_init()->mct_init_spi()->mct_init_dt()->irq_of_parse_and_map()
 
 * 93th (2015/03/07) week [93차](https://github.com/hephaex/kernel_review/blob/master/a10c_93.md)
  - start_kernel()->time_init()->of_clk_init()
