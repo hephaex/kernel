@@ -162,6 +162,7 @@ void tick_setup_periodic(struct clock_event_device *dev, int broadcast)
 /*
  * Setup the tick device
  */
+/* a10c */
 static void tick_setup_device(struct tick_device *td,
 			      struct clock_event_device *newdev, int cpu,
 			      const struct cpumask *cpumask)
@@ -212,9 +213,14 @@ static void tick_setup_device(struct tick_device *td,
 	 * way. This function also returns !=0 when we keep the
 	 * current active broadcast state for this CPU.
 	 */
+	// tick_device_uses_broadcast(newdev, cpu): 0
 	if (tick_device_uses_broadcast(newdev, cpu))
 		return;
 
+	/* 
+	 * td->mode: 1 , TICKDEV_MODE_PERIODIC: 0
+	*/
+	// td->mode: 0 == TICKDEV_MODE_PERIODIC: 0
 	if (td->mode == TICKDEV_MODE_PERIODIC)
 		tick_setup_periodic(newdev, 0);
 	else
@@ -285,6 +291,7 @@ bool tick_check_replacement(struct clock_event_device *curdev,
  * Check, if the new registered device should be used. Called with
  * clockevents_lock held and interrupts disabled.
  */
+/* a10c */
 void tick_check_new_device(struct clock_event_device *newdev)
 {
 	struct clock_event_device *curdev;

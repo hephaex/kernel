@@ -34,6 +34,7 @@ void __init clocksource_of_init(void)
 			continue;
 
 		init_func = match->data;
+
 		init_func(np);
 	}
 }

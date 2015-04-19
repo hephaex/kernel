@@ -298,6 +298,7 @@ static inline void cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
  * @cpu: cpu number (< nr_cpu_ids)
  * @dstp: the cpumask pointer
  */
+/* a10c 20150418 */
 static inline void cpumask_clear_cpu(int cpu, struct cpumask *dstp)
 {
 	clear_bit(cpumask_check(cpu), cpumask_bits(dstp));
@@ -485,9 +486,14 @@ static inline int cpumask_subset(const struct cpumask *src1p,
  * cpumask_empty - *srcp == 0
  * @srcp: the cpumask to that all cpus < nr_cpu_ids are clear.
  */
+/* a10c 20150418 */
 static inline bool cpumask_empty(const struct cpumask *srcp)
 {
+        // srcp: tick_broadcast_mask
+        // cpumask_bits:(srcp): tick_broadcast_mask->bits
+        // nr_cpumask_bits: 4
 	return bitmap_empty(cpumask_bits(srcp), nr_cpumask_bits);
+	// return (bitmap_empty(cpumask_bits(srcp), nr_cpumask_bits): 1
 }
 
 /**

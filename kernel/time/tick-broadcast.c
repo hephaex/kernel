@@ -28,6 +28,7 @@
  * timer stops in C3 state.
  */
 
+/* a10c */
 static struct tick_device tick_broadcast_device;
 static cpumask_var_t tick_broadcast_mask;
 static cpumask_var_t tick_broadcast_on;
@@ -140,6 +141,7 @@ static void tick_device_setup_broadcast_func(struct clock_event_device *dev)
  * Check, if the device is disfunctional and a place holder, which
  * needs to be handled by the broadcast device.
  */
+/* a10c 20150418 */
 int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
 {
 	struct clock_event_device *bc = tick_broadcast_device.evtdev;
@@ -154,6 +156,7 @@ int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
 	 * operated from the broadcast device and is a placeholder for
 	 * the cpu local device.
 	 */
+	/* tick_device_is_fuctional: 1 */
 	if (!tick_device_is_functional(dev)) {
 		dev->event_handler = tick_handle_periodic;
 		tick_device_setup_broadcast_func(dev);
@@ -164,18 +167,30 @@ int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
 			tick_broadcast_setup_oneshot(bc);
 		ret = 1;
 	} else {
+	        /* a10c 20150418 this */
 		/*
 		 * Clear the broadcast bit for this cpu if the
 		 * device is not power state affected.
+		 *
+		 * dev->features: 0x3
+		 * CLOCK_EVT_FEAT_C3STOP: 0x08
 		 */
 		if (!(dev->features & CLOCK_EVT_FEAT_C3STOP))
+		        /*
+			 * cpu: 0, tick_broadcast_mask: tick_broadcast_mask.bits[0]: 0
+			 */
 			cpumask_clear_cpu(cpu, tick_broadcast_mask);
+		        // cpumask_clear_cpu에서 한일
+		        // tick_broadcast_mask.bits[0]: 0
 		else
 			tick_device_setup_broadcast_func(dev);
 
 		/*
 		 * Clear the broadcast bit if the CPU is not in
 		 * periodic broadcast on state.
+		 */
+		/* 
+		 * tick_broadcast_on: 
 		 */
 		if (!cpumask_test_cpu(cpu, tick_broadcast_on))
 			cpumask_clear_cpu(cpu, tick_broadcast_mask);
@@ -194,11 +209,14 @@ int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
 			ret = 0;
 			break;
 
-		case TICKDEV_MODE_PERIODIC:
+		case TICKDEV_MODE_PERIODIC: // TICKDEV_MODE_PERIODIC: 0
 			/*
 			 * If the system is in periodic mode, check
 			 * whether the broadcast device can be
 			 * switched off now.
+			 */
+		        /*
+			 * cpumask_empty(tick_broadcast_mask):1 && bc: NULL
 			 */
 			if (cpumask_empty(tick_broadcast_mask) && bc)
 				clockevents_shutdown(bc);
@@ -209,6 +227,7 @@ int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
 			 * is delivered by the broadcast device.
 			 */
 			ret = cpumask_test_cpu(cpu, tick_broadcast_mask);
+			// ret: 0
 			break;
 		default:
 			/* Nothing to do */
@@ -218,6 +237,7 @@ int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
 	}
 	raw_spin_unlock_irqrestore(&tick_broadcast_lock, flags);
 	return ret;
+	// return ret: 0
 }
 
 #ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST

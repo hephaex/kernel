@@ -289,10 +289,21 @@ static inline int bitmap_subset(const unsigned long *src1,
 		return __bitmap_subset(src1, src2, nbits);
 }
 
+/* a10c 20150418 */
+// cpumask_bits:(srcp): tick_broadcast_mask->bits
+// nr_cpumask_bits: 4
+
 static inline int bitmap_empty(const unsigned long *src, int nbits)
 {
+  /* nbits: 4 */
 	if (small_const_nbits(nbits))
+	  // smal_const_nbits(nbits): 1
 		return ! (*src & BITMAP_LAST_WORD_MASK(nbits));
+	        /*
+		 * src: tick_broadcast_mask.bits[0]: 0
+		 * BITMAP_LAST_WORD_MASK(nbits: 4): 0xf
+		 * ! (0) : return 1
+		*/
 	else
 		return __bitmap_empty(src, nbits);
 }

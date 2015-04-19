@@ -398,6 +398,7 @@ static irqreturn_t exynos4_mct_tick_isr(int irq, void *dev_id)
 	return IRQ_HANDLED;
 }
 
+/* a10c */
 static int exynos4_local_timer_setup(struct clock_event_device *evt)
 {
 	struct mct_clock_event_device *mevt;
@@ -478,6 +479,7 @@ static struct notifier_block exynos4_mct_cpu_nb = {
 	.notifier_call = exynos4_mct_cpu_notify,
 };
 
+/* a10c */
 static void __init exynos4_timer_resources(struct device_node *np, void __iomem *base)
 {
 	int err;
@@ -550,6 +552,7 @@ void __init mct_init(void __iomem *base, int irq_g0, int irq_l0, int irq_l1)
 	exynos4_clockevent_init();
 }
 
+/* a10c */
 static void __init mct_init_dt(struct device_node *np, unsigned int int_type)
 {
 	u32 nr_irqs, i;
@@ -577,7 +580,7 @@ static void __init mct_init_dt(struct device_node *np, unsigned int int_type)
 	exynos4_clockevent_init();
 }
 
-
+/* a10c */
 static void __init mct_init_spi(struct device_node *np)
 {
 	return mct_init_dt(np, MCT_INT_SPI);

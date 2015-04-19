@@ -375,6 +375,7 @@ EXPORT_SYMBOL_GPL(clockevents_unbind);
  * clockevents_register_device - register a clock event device
  * @dev:	device to register
  */
+/* a10c */
 void clockevents_register_device(struct clock_event_device *dev)
 {
 	unsigned long flags;
@@ -428,6 +429,7 @@ void clockevents_config(struct clock_event_device *dev, u32 freq)
  *
  * min/max_delta can be 0 for devices which do not support oneshot mode.
  */
+/* a10c */
 void clockevents_config_and_register(struct clock_event_device *dev,
 				     u32 freq, unsigned long min_delta,
 				     unsigned long max_delta)

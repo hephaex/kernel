@@ -147,9 +147,15 @@ static inline void tick_set_periodic_handler(struct clock_event_device *dev,
 /*
  * Check, if the device is functional or a dummy for broadcast
  */
+/* a10c 20150418 */
 static inline int tick_device_is_functional(struct clock_event_device *dev)
 {
+        /* 
+	 * dev->features: [pcp0] (&(&percpu_mct_tick)->evt)->features: 0x3
+	 * CLOCK_EVT_FEAT_DUMMY: 0x000010
+	 */
 	return !(dev->features & CLOCK_EVT_FEAT_DUMMY);
+	/* returen 1 */
 }
 
 #endif
