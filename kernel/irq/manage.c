@@ -922,7 +922,7 @@ static void irq_setup_forced_threading(struct irqaction *new)
  * Internal function to register an irqaction - typically used to
  * allocate special interrupts that are part of the architecture.
  */
-static int
+static int			/* a10c_20150509 */
 __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 {
 	struct irqaction *old, **old_ptr;
@@ -943,6 +943,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 * thread.
 	 */
 	nested = irq_settings_is_nested_thread(desc);
+	/* nested: 0 */
 	if (nested) {
 		if (!new->thread_fn) {
 			ret = -EINVAL;
@@ -955,6 +956,9 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		 */
 		new->handler = irq_nested_primary_handler;
 	} else {
+	  /* desc: kmem_cache@#28-ox (irq 152) 
+	   * irq_settiings_can_thread(kmem_cache@#28-ox (irq 152) ): 0
+	   */
 		if (irq_settings_can_thread(desc))
 			irq_setup_forced_threading(new);
 	}
@@ -964,6 +968,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 * and the interrupt does not nest into another interrupt
 	 * thread.
 	 */
+	/* nested: 0, new_thread_fn: 0 */
 	if (new->thread_fn && !nested) {
 		struct task_struct *t;
 		static const struct sched_param param = {
@@ -998,6 +1003,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		set_bit(IRQTF_AFFINITY, &new->thread_flags);
 	}
 
+	/* alloc_cpumask_var(&mask, GFP_KERNEL: D0): true */
 	if (!alloc_cpumask_var(&mask, GFP_KERNEL)) {
 		ret = -ENOMEM;
 		goto out_thread;
@@ -1012,6 +1018,10 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 * chip flags, so we can avoid the unmask dance at the end of
 	 * the threaded handler for those.
 	 */
+	/* desc->irq_data.chip: (kmem_cache#28-ox (irq 152)).chip->flags
+	 * chip: &gic_chip, chip->flags: 0 (초기화 하지 않았기 때문에 0)
+	 * (desc->irq_data.chip->flags & IRQCHIP_ONESHOT_SAFE: 0x20): 0
+	 */
 	if (desc->irq_data.chip->flags & IRQCHIP_ONESHOT_SAFE)
 		new->flags &= ~IRQF_ONESHOT;
 
@@ -1019,8 +1029,10 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 * The following block of code has to be executed atomically
 	 */
 	raw_spin_lock_irqsave(&desc->lock, flags);
+	/* old_ptr: *(&((kmem_cache#28-ox (irq 152))->action): null */
 	old_ptr = &desc->action;
 	old = *old_ptr;
+	/* old: *old_ptr: null */
 	if (old) {
 		/*
 		 * Can't share interrupts unless both agree to and are
@@ -1058,6 +1070,9 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 * !ONESHOT irqs the thread mask is 0 so we can avoid a
 	 * conditional in irq_wake_thread().
 	 */
+	/* new->flags: (&kmem_cache#30-oX)->flags: 0x14A00 
+	 * IRQF_ONESHOT: 0x00002000
+	 */
 	if (new->flags & IRQF_ONESHOT) {
 		/*
 		 * Unlikely to have 32 resp 64 irqs sharing one line,
@@ -1091,6 +1106,11 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 	} else if (new->handler == irq_default_primary_handler &&
 		   !(desc->irq_data.chip->flags & IRQCHIP_ONESHOT_SAFE)) {
+	  /* else로 진행
+	   * new->handler: exynos4_mct_tick_isr 
+	   * irq_default_primary_handler: 0
+	   * IRQCHIP_ONESHOT_SAFE: 0
+	   */
 		/*
 		 * The interrupt was requested with handler = NULL, so
 		 * we use the default primary handler for it. But it
@@ -1112,6 +1132,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		goto out_mask;
 	}
 
+	/* shared: 0 */
 	if (!shared) {
 		init_waitqueue_head(&desc->wait_for_threads);
 
@@ -1126,7 +1147,10 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 		desc->istate &= ~(IRQS_AUTODETECT | IRQS_SPURIOUS_DISABLED | \
 				  IRQS_ONESHOT | IRQS_WAITING);
+		/*  &desc->irq_data: kmem_cache#28-oX(irq 152)->irq_data: 
+		 *  IRQD_IRQ_INPROGRESS: 0x40000 */
 		irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS);
+		/* irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS): 0x10800 */
 
 		if (new->flags & IRQF_PERCPU) {
 			irqd_set(&desc->irq_data, IRQD_PER_CPU);
@@ -1136,18 +1160,32 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		if (new->flags & IRQF_ONESHOT)
 			desc->istate |= IRQS_ONESHOT;
 
+		/* desc: kmem_cache#28-oX(irq 152) 
+		 * irq_settings_can_autoenable(desc): 0
+		 */
 		if (irq_settings_can_autoenable(desc))
 			irq_startup(desc, true);
 		else
 			/* Undo nested disables: */
 			desc->depth = 1;
-
+		/* desc->depth: (kmem_cache#28-oX(irq 152))->depth: 1  */
 		/* Exclude IRQ from balancing if requested */
+
+		/* IRQF_NOBALANCING: 0x800 */
 		if (new->flags & IRQF_NOBALANCING) {
 			irq_settings_set_no_balancing(desc);
-			irqd_set(&desc->irq_data, IRQD_NO_BALANCING);
-		}
+			/* irq_settings_set_no_balancing(desc): 0x33600 */
 
+			/* &desc->irq_data, IRQD_NO_BALANCING: 0x400 */
+			irqd_set(&desc->irq_data, IRQD_NO_BALANCING);
+			/* 
+			 * &desc->irq_data: (kmem_cache#28-oX (irq 152))->irq_data: 0x10800
+			 * IRQD_NO_BALANCING: 0x400
+			 * irqd_set(&desc->irq_data, IRQD_NO_BALANCING): 0x11000
+			 */ 
+
+		}
+	/* a10c 5509 */
 		/* Set default affinity mask once everything is setup */
 		setup_affinity(irq, desc, mask);
 

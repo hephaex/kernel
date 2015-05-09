@@ -170,6 +170,10 @@ static inline void irqd_clear(struct irq_data *d, unsigned int mask)
 	d->state_use_accessors &= ~mask;
 }
 
+/* a10c 5509
+ * &desc->irq_data: (kmem_cache#28-oX (irq 152))->irq_data: 0x10800
+ * IRQD_NO_BALANCING: 0x400 
+ */
 static inline void irqd_set(struct irq_data *d, unsigned int mask)
 {
 	d->state_use_accessors |= mask;

@@ -53,6 +53,9 @@ static inline void irq_settings_set_per_cpu(struct irq_desc *desc)
 	desc->status_use_accessors |= _IRQ_PER_CPU;
 }
 
+/* a10c 5509 
+* (kmem_cache#28-oX(irq 152))
+*/
 static inline void irq_settings_set_no_balancing(struct irq_desc *desc)
 {
 	desc->status_use_accessors |= _IRQ_NO_BALANCING;
@@ -140,7 +143,10 @@ static inline bool irq_settings_can_move_pcntxt(struct irq_desc *desc)
 	return desc->status_use_accessors & _IRQ_MOVE_PCNTXT;
 }
 
-static inline bool irq_settings_can_autoenable(struct irq_desc *desc)
+/* a10c_5509 
+ * desc: kmem_cache#28-oX(irq 152) 
+ */
+static inline bool irq_settings_can_autoenable(struct irq_desc *desc) /*  */
 {
 	return !(desc->status_use_accessors & _IRQ_NOAUTOEN);
 }
