@@ -4,11 +4,13 @@ All of this repository are written by hephaex@gmail.com.
 Community name: IAMROOT.ORG ARM kernel study 10th C team
 Target Soc    : Samsung Exynos 5420 (ARMv7 A7&A15 bigLITTLE )
 Kernel version: Linux kernel 3.13.x
- - 3.10.x: A bootstrab before start_kernel(): 3.10.x
- - start_kernel()->mm_init: 3.13.x 
+ - 1st: 3.10.x, A bootstrab before start_kernel(): 3.10.x
+ - 2nd: start_kernel()->mm_init: 3.13.x 
 
 # The history of Linux kernel study
 * 100th (2015/04/25) week [100차](https://github.com/hephaex/kernel_review/blob/master/a10c_100.md)
+ - NIPA 5층 대강당, 12차 Iamroot OT.
+ - 개발에 대한 자유토론. (IoT, 3D/4D Printing, 라즈베리파이2, 오드로이드...)
 * 99th (2015/04/19) week [99차](https://github.com/hephaex/kernel_review/blob/master/a10c_99.md)
 * 98th (2015/04/11) week [98차](https://github.com/hephaex/kernel_review/blob/master/a10c_98.md)
 * 97th (2015/04/04) week [97차](https://github.com/hephaex/kernel_review/blob/master/a10c_97.md)
