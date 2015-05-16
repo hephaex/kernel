@@ -1241,6 +1241,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 	register_irq_proc(irq, desc);
 	new->dir = NULL;
+	/* irq: 152, new: kmem_cache#30-oX */
 	register_handler_proc(irq, new);
 	free_cpumask_var(mask);
 

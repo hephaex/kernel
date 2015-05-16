@@ -83,16 +83,17 @@ irqreturn_t handle_irq_event(struct irq_desc *desc);
 void check_irq_resend(struct irq_desc *desc, unsigned int irq);
 bool irq_wait_for_poll(struct irq_desc *desc);
 
-#ifdef CONFIG_PROC_FS
+#ifdef CONFIG_PROC_FS // CONFIG_PROC_FS=y
+/* a10c 5516 */
 extern void register_irq_proc(unsigned int irq, struct irq_desc *desc);
 extern void unregister_irq_proc(unsigned int irq, struct irq_desc *desc);
+/* a10c 5516 */
 extern void register_handler_proc(unsigned int irq, struct irqaction *action);
 extern void unregister_handler_proc(unsigned int irq, struct irqaction *action);
 #else
-/* a10c 5516 */
 static inline void register_irq_proc(unsigned int irq, struct irq_desc *desc) { }
 static inline void unregister_irq_proc(unsigned int irq, struct irq_desc *desc) { }
-static inline void register_handler_proc(unsigned int irq,
+static inline void register_handler_proc(unsigned int irq, 
 					 struct irqaction *action) { }
 static inline void unregister_handler_proc(unsigned int irq,
 					   struct irqaction *action) { }
