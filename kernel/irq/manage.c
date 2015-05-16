@@ -84,13 +84,21 @@ cpumask_var_t irq_default_affinity;
  *	@irq:		Interrupt to check
  *
  */
+/* a10c 5516 */
 int irq_can_set_affinity(unsigned int irq)
 {
+        /* irq: 152, irq_to_desc(152): kmem_cahce#28-oX (irq 152) */
 	struct irq_desc *desc = irq_to_desc(irq);
+	// desc: kmem_cahce#28-oX (irq 152)
 
+	// desc: kmem_cahce#28-oX (irq 152)
+	// irqd_can_balance( (kmem_cahce#28-oX (irq 152)->irq_data) )
+	// desc->irq_data.chip: &gic_chip
+	// desc->irq_data.chip->irq_set_affinity: (kmem_cahce#28-oX (irq 152)->irq_data)->irq_set_affinity: gic_set_affinity 
 	if (!desc || !irqd_can_balance(&desc->irq_data) ||
 	    !desc->irq_data.chip || !desc->irq_data.chip->irq_set_affinity)
 		return 0;
+	        /* a10c 5516 return 0*/
 
 	return 1;
 }
@@ -315,16 +323,19 @@ EXPORT_SYMBOL_GPL(irq_set_affinity_notifier);
 /*
  * Generic version of the affinity autoselector.
  */
+/* a10c 5516 */
 static int
 setup_affinity(unsigned int irq, struct irq_desc *desc, struct cpumask *mask)
 {
 	struct cpumask *set = irq_default_affinity;
+	/* irq: 152, mask: kmem_cahce@28-oX (irq 152), irq_data.node: 0 */
 	int node = desc->irq_data.node;
 
 	/* Excludes PER_CPU and NO_BALANCE interrupts */
+	/* irq 152 */
 	if (!irq_can_set_affinity(irq))
 		return 0;
-
+	        /* a10c 5516 return 0  */
 	/*
 	 * Preserve an userspace affinity setup, but make sure that
 	 * one of the targets is online.
@@ -1187,7 +1198,9 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		}
 	/* a10c 5509 */
 		/* Set default affinity mask once everything is setup */
+		/* a10c 5516 */
 		setup_affinity(irq, desc, mask);
+		/* a10c 5516 return 0*/
 
 	} else if (new->flags & IRQF_TRIGGER_MASK) {
 		unsigned int nmsk = new->flags & IRQF_TRIGGER_MASK;
@@ -1210,6 +1223,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 * Check whether we disabled the irq via the spurious handler
 	 * before. Reenable it and give it another chance.
 	 */
+	// shared: 0, desc->istate: (kmem_cache#28-oX (irq 152))->istate: 0
+	// IRQS_SPURIOUS_DISABLED: 0x00000002
 	if (shared && (desc->istate & IRQS_SPURIOUS_DISABLED)) {
 		desc->istate &= ~IRQS_SPURIOUS_DISABLED;
 		__enable_irq(desc, irq, false);
@@ -1233,6 +1248,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 mismatch:
 	if (!(new->flags & IRQF_PROBE_SHARED)) {
+	  
 		pr_err("Flags mismatch irq %d. %08x (%s) vs. %08x (%s)\n",
 		       irq, new->flags, new->name, old->flags, old->name);
 #ifdef CONFIG_DEBUG_SHIRQ

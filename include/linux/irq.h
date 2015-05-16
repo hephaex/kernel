@@ -198,8 +198,10 @@ static inline bool irqd_is_per_cpu(struct irq_data *d)
 	return d->state_use_accessors & IRQD_PER_CPU;
 }
 
+/* a10c 5516 */
 static inline bool irqd_can_balance(struct irq_data *d)
 {
+        // d->state_use_accessors: (&(kmem_cache#28-oX (irq 152))->irq_data)->state_use_accessor: 0x14420
 	return !(d->state_use_accessors & (IRQD_PER_CPU | IRQD_NO_BALANCING));
 }
 

@@ -250,6 +250,7 @@ static inline void do_raw_spin_unlock(raw_spinlock_t *lock) __releases(lock)
 #define raw_spin_unlock(lock)		_raw_spin_unlock(lock)
 #define raw_spin_unlock_irq(lock)	_raw_spin_unlock_irq(lock)
 
+/* a10c 5516 */
 #define raw_spin_unlock_irqrestore(lock, flags)		\
 	do {							\
 		typecheck(unsigned long, flags);		\
