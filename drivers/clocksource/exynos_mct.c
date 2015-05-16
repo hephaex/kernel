@@ -150,6 +150,7 @@ static void exynos4_mct_write(unsigned int value, unsigned long offset)
 }
 
 /* Clocksource handling */
+/* a10c_5516 */
 static void exynos4_mct_frc_start(u32 hi, u32 lo)
 {
 	u32 reg;
