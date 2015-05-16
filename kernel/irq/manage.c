@@ -1246,7 +1246,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	free_cpumask_var(mask);
 
 	return 0;
-
+	/* a10c_5516 return 0 */
 mismatch:
 	if (!(new->flags & IRQF_PROBE_SHARED)) {
 	  

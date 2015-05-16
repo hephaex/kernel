@@ -190,7 +190,8 @@ struct clocksource mct_frc = {
 	.resume		= exynos4_frc_resume,
 };
 
-static void __init exynos4_clocksource_init(void)
+/* a10c_5516 */
+static void __init exynos4_clocksource_init(void) 
 {
 	exynos4_mct_frc_start(0, 0);
 
@@ -422,6 +423,11 @@ static int exynos4_local_timer_setup(struct clock_event_device *evt)
 
 	if (mct_int_type == MCT_INT_SPI) {
 		evt->irq = mct_irqs[MCT_L0_IRQ + cpu];
+		/* request_irq(evt->irq: 
+		 * exynos4_mct_tick_isr:
+		 * IRQF_TIMER: | IRQF_NOBALANCING:
+		 * evt->name, mevt)): 0
+		 */
 		if (request_irq(evt->irq, exynos4_mct_tick_isr,
 				IRQF_TIMER | IRQF_NOBALANCING,
 				evt->name, mevt)) {

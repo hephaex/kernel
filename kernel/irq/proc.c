@@ -286,6 +286,7 @@ static int name_unique(unsigned int irq, struct irqaction *new_action)
 	}
 	raw_spin_unlock_irqrestore(&desc->lock, flags);
 	return ret;
+	/* a10c return ret: 1 */
 }
 
 /* a10c 5516 */
@@ -297,11 +298,11 @@ void register_handler_proc(unsigned int irq, struct irqaction *action)
 	/* desc->dir: (kmem_cache#30-oX)->dir: NULL,
 	 * action->dir: (kmem_cache#30-oX)->dir: NULL,
 	 * action->name: (kmem_cache#30-oX)->name: NULL
-	 * name_unique: (irq: 152, action: (kmem_cache#30-oX)):  */
+	 * name_unique: (irq: 152, action: (kmem_cache#30-oX)): 1 */
 	if (!desc->dir || action->dir || !action->name ||
 					!name_unique(irq, action))
 		return;
-	        /* a10c 5516 return  */
+	        /* a10c 5516 return 1 */
 
 	memset(name, 0, MAX_NAMELEN);
 	snprintf(name, MAX_NAMELEN, "%s", action->name);
