@@ -268,6 +268,7 @@ static const struct file_operations irq_spurious_proc_fops = {
 
 #define MAX_NAMELEN 128
 
+/* a10c 5516 */
 static int name_unique(unsigned int irq, struct irqaction *new_action)
 {
 	struct irq_desc *desc = irq_to_desc(irq);
@@ -287,14 +288,20 @@ static int name_unique(unsigned int irq, struct irqaction *new_action)
 	return ret;
 }
 
+/* a10c 5516 */
 void register_handler_proc(unsigned int irq, struct irqaction *action)
 {
 	char name [MAX_NAMELEN];
 	struct irq_desc *desc = irq_to_desc(irq);
 
+	/* desc->dir: (kmem_cache#30-oX)->dir: NULL,
+	 * action->dir: (kmem_cache#30-oX)->dir: NULL,
+	 * action->name: (kmem_cache#30-oX)->name: NULL
+	 * name_unique: (irq: 152, action: (kmem_cache#30-oX)):  */
 	if (!desc->dir || action->dir || !action->name ||
 					!name_unique(irq, action))
 		return;
+	        /* a10c 5516 return  */
 
 	memset(name, 0, MAX_NAMELEN);
 	snprintf(name, MAX_NAMELEN, "%s", action->name);
