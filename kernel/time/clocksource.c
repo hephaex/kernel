@@ -381,6 +381,7 @@ static void clocksource_resume_watchdog(void)
 	atomic_inc(&watchdog_reset_pending);
 }
 
+/* a10c_5526 */
 static void clocksource_enqueue_watchdog(struct clocksource *cs)
 {
 	unsigned long flags;
@@ -709,11 +710,13 @@ fs_initcall(clocksource_done_booting);
 /*
  * Enqueue the clocksource sorted by rating
  */
+/* a10c_5526 */
 static void clocksource_enqueue(struct clocksource *cs)
 {
 	struct list_head *entry = &clocksource_list;
 	struct clocksource *tmp;
 
+	/* clocksource_list: NULL 이므로 이번은 아무것도 안함 */
 	list_for_each_entry(tmp, &clocksource_list, list)
 		/* Keep track of the place, where to insert */
 		if (tmp->rating >= cs->rating)
@@ -732,6 +735,7 @@ static void clocksource_enqueue(struct clocksource *cs)
  * This *SHOULD NOT* be called directly! Please use the
  * clocksource_updatefreq_hz() or clocksource_updatefreq_khz helper functions.
  */
+/* a10c_5523 */
 void __clocksource_updatefreq_scale(struct clocksource *cs, u32 scale, u32 freq)
 {
 	u64 sec;
@@ -745,6 +749,7 @@ void __clocksource_updatefreq_scale(struct clocksource *cs, u32 scale, u32 freq)
 	 * ~ 0.06ppm granularity for NTP. We apply the same 12.5%
 	 * margin as we do in clocksource_max_deferment()
 	 */
+	/* cs->mask: (&mct_frc)->mask: CLOCKSOURCE_MASK(64): 0xFFFFFFFF */
 	sec = (cs->mask - (cs->mask >> 3));
 	do_div(sec, freq);
 	do_div(sec, scale);
@@ -784,12 +789,19 @@ EXPORT_SYMBOL_GPL(__clocksource_updatefreq_scale);
  * This *SHOULD NOT* be called directly! Please use the
  * clocksource_register_hz() or clocksource_register_khz helper functions.
  */
+/* a10c_5523 */
 int __clocksource_register_scale(struct clocksource *cs, u32 scale, u32 freq)
 {
 
 	/* Initialize mult/shift and max_idle_ns */
 	__clocksource_updatefreq_scale(cs, scale, freq);
 
+	/* a10c_5523
+	 * (&mct_frc)->mult: 0xA6AAAAAA
+	 * (&mct_frc)->shift: 26
+	 * (&mct_frc)->maxadj: 0x12555555
+	 * (&mct_frc)->max_idle_ns: 0x10395
+	 */
 	/* Add clocksource to the clcoksource list */
 	mutex_lock(&clocksource_mutex);
 	clocksource_enqueue(cs);

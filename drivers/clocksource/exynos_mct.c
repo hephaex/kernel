@@ -116,8 +116,11 @@ static void exynos4_mct_write(unsigned int value, unsigned long offset)
 		switch (offset) {
 		case EXYNOS4_MCT_G_TCON:
 		        /* EXYNOS4_MCT_G_TCON: 0x240 */
+		        /* a10c_5523 0x240  */
 			stat_addr = EXYNOS4_MCT_G_WSTAT;
+			/* stat_addr: 0x24c */
 			mask = 1 << 16;		/* G_TCON write status */
+			/* mask: 0x10000 */
 			break;
 		case EXYNOS4_MCT_G_COMP0_L:
 		        /* EXYNOS4_MCT_G_COMP0_L: 0x200 */
@@ -154,8 +157,10 @@ static void exynos4_mct_write(unsigned int value, unsigned long offset)
 	/* loops_per_jiffy: (1<<12): (0x100): 4096 , HZ: 100 */
 	for (i = 0; i < loops_per_jiffy / 1000 * HZ; i++)
 	        /* reg_base: 0xf0006000, offset: 0x110, mask: 1 */
+	        /* reg_base: 0xf0006000, start_addr: 0x24c, mask: 10000 */
 		if (__raw_readl(reg_base + stat_addr) & mask) {
 		        /* mask: 0x1, reg_base: 0xf0006000, stat_addr: 0x110  */
+		        /* mask: 0x10000, reg_base: 0xf0006000, stat_addr: 0x24c G_WSTAT */
 			__raw_writel(mask, reg_base + stat_addr);
 			
 			return;
@@ -184,6 +189,7 @@ static void exynos4_mct_frc_start(u32 hi, u32 lo)
 	/* reg: __raw_readl(): 0x100 */
 	reg |= MCT_G_TCON_START;
 	exynos4_mct_write(reg, EXYNOS4_MCT_G_TCON);
+	// exynos4_mct_write(reg, EXYNOS4_MCT_G_TCON): global timer enable
 }
 
 static cycle_t exynos4_frc_read(struct clocksource *cs)
