@@ -104,6 +104,7 @@ static inline u8 __raw_readb(const volatile void __iomem *addr)
 }
 
 // ARM10C 20131130
+/* a10c_5516 */
 static inline u32 __raw_readl(const volatile void __iomem *addr)
 {
 	u32 val;

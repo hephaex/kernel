@@ -85,6 +85,9 @@ struct mct_clock_event_device {
 	char name[10];
 };
 
+/* a10c_5516
+ * lo: 0, EXYNOS4_MCT_G_CNT_L: 0x100 
+*/ 
 static void exynos4_mct_write(unsigned int value, unsigned long offset)
 {
 	unsigned long stat_addr;
@@ -109,28 +112,36 @@ static void exynos4_mct_write(unsigned int value, unsigned long offset)
 			return;
 		}
 	} else {
+	        /* a10c_5516 offset: 0x100  */
 		switch (offset) {
 		case EXYNOS4_MCT_G_TCON:
+		        /* EXYNOS4_MCT_G_TCON: 0x240 */
 			stat_addr = EXYNOS4_MCT_G_WSTAT;
 			mask = 1 << 16;		/* G_TCON write status */
 			break;
 		case EXYNOS4_MCT_G_COMP0_L:
+		        /* EXYNOS4_MCT_G_COMP0_L: 0x200 */
 			stat_addr = EXYNOS4_MCT_G_WSTAT;
 			mask = 1 << 0;		/* G_COMP0_L write status */
 			break;
 		case EXYNOS4_MCT_G_COMP0_U:
+		        /* EXYNOS4_MCT_G_COMP0_U: 0x204 */
 			stat_addr = EXYNOS4_MCT_G_WSTAT;
 			mask = 1 << 1;		/* G_COMP0_U write status */
 			break;
 		case EXYNOS4_MCT_G_COMP0_ADD_INCR:
+		        /* EXYNOS4_MCT_G_COMP0_ADD_INCR: 0x208 */
 			stat_addr = EXYNOS4_MCT_G_WSTAT;
 			mask = 1 << 2;		/* G_COMP0_ADD_INCR w status */
+			/* mask: 0x1 */
 			break;
 		case EXYNOS4_MCT_G_CNT_L:
+		        /* EXYNOS4_MCT_G_CNT_L: 0x100 */
 			stat_addr = EXYNOS4_MCT_G_CNT_WSTAT;
 			mask = 1 << 0;		/* G_CNT_L write status */
 			break;
 		case EXYNOS4_MCT_G_CNT_U:
+		        /* EXYNOS4_MCT_G_CNT_U: 0x104 */
 			stat_addr = EXYNOS4_MCT_G_CNT_WSTAT;
 			mask = 1 << 1;		/* G_CNT_U write status */
 			break;
@@ -140,10 +151,15 @@ static void exynos4_mct_write(unsigned int value, unsigned long offset)
 	}
 
 	/* Wait maximum 1 ms until written values are applied */
+	/* loops_per_jiffy: (1<<12): (0x100): 4096 , HZ: 100 */
 	for (i = 0; i < loops_per_jiffy / 1000 * HZ; i++)
+	        /* reg_base: 0xf0006000, offset: 0x110, mask: 1 */
 		if (__raw_readl(reg_base + stat_addr) & mask) {
+		        /* mask: 0x1, reg_base: 0xf0006000, stat_addr: 0x110  */
 			__raw_writel(mask, reg_base + stat_addr);
+			
 			return;
+			// G_CNT_L: 1로 설정함.
 		}
 
 	panic("MCT hangs after writing %d (offset:0x%lx)\n", value, offset);
@@ -155,10 +171,17 @@ static void exynos4_mct_frc_start(u32 hi, u32 lo)
 {
 	u32 reg;
 
+	/* lo: 0, EXYNOS4_MCT_G_CNT_L: 0x100 */
 	exynos4_mct_write(lo, EXYNOS4_MCT_G_CNT_L);
+	// EXYNOS4_MCT_G_CNT_L: 0xf0006110을 0x1로 설정함.
+
+	/* hi: 0, EXYNOS4_MCT_G_CNT_H: 0x1040 */
 	exynos4_mct_write(hi, EXYNOS4_MCT_G_CNT_U);
 
+/* a10c_5516 종료 */
+/* a10c_5523 시작 */
 	reg = __raw_readl(reg_base + EXYNOS4_MCT_G_TCON);
+	/* reg: __raw_readl(): 0x100 */
 	reg |= MCT_G_TCON_START;
 	exynos4_mct_write(reg, EXYNOS4_MCT_G_TCON);
 }
