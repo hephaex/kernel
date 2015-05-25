@@ -318,6 +318,7 @@ static struct irqaction mct_comp_event_irq = {
 	.dev_id		= &mct_comp_device,
 };
 
+/* a10c_5526 */
 static void exynos4_clockevent_init(void)
 {
 	mct_comp_device.cpumask = cpumask_of(0);
