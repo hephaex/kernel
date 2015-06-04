@@ -8,6 +8,10 @@ Kernel version: Linux kernel 3.13.x
  - 2nd: start_kernel()->mm_init: 3.13.x 
 
 # The history of Linux kernel study
+* 102th (2015/05/23) week [102차](https://github.com/hephaex/kernel_review/blob/master/a10c_102.md)
+ - time_init()
+   - timer 를 사용하기 위한 clk source, clk_table 메모리 할당 및 초기화,
+   - timer event를 위한 timer irq (MCT) 초기화 수행
 * 101th (2015/05/16) week [101차](https://github.com/hephaex/kernel_review/blob/master/a10c_101.md)
 * 100th (2015/04/25) week [100차](https://github.com/hephaex/kernel_review/blob/master/a10c_100.md)
  - NIPA 5층 대강당, 12차 Iamroot OT.
