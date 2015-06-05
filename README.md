@@ -8,6 +8,8 @@ Kernel version: Linux kernel 3.13.x
  - 2nd: start_kernel()->mm_init: 3.13.x 
 
 # The history of Linux kernel study
+* 103th (2015/05/30) week [103차](https://github.com/hephaex/kernel_review/blob/master/a10c_103.md)
+ - sched_clock_postinit();
 * 102th (2015/05/23) week [102차](https://github.com/hephaex/kernel_review/blob/master/a10c_102.md)
  - time_init()
    - timer 를 사용하기 위한 clk source, clk_table 메모리 할당 및 초기화,
