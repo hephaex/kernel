@@ -172,7 +172,7 @@ Kernel version: Linux kernel 3.13.x
 * 10th (2012-06-29) week [10차](https://github.com/hephaex/kernel_review/blob/master/a10c_10.md) 22명
  - arch/arm/boot/compressed/head.S 분석
  - _setup_mmu 진입직전
-* 09th (2012-06-22) week [09차](http://www.iamroot.org/xe/index.php?mid=Kernel_10_ARM&category=172676&page=6&document_srl=171562) 25명
+* 09th (2012-06-22) week [09차](https://github.com/hephaex/kernel_review/blob/master/a10c_09.md) 25명
  - Arm System Developer's Guide (Ch.14 ~ 끝)
  - arch/arm/boot/compressed/head.S 분석
  - call_cache_fn 진입직전
