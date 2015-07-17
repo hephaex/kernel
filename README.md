@@ -1,5 +1,5 @@
-# The Linux Kernel review for ARMv7 3.13.0 (exynos 5420)
-All of this repository are written by hephaex@gmail.com.
+# The Linux Kernel review for ARMv7 3.13.x (exynos 5420)
+All of this repository by hephaex@gmail.com.
 
 Community name: kernel study a10th C team
 Target Soc    : Samsung Exynos 5420 (ARMv7 A7&A15 bigLITTLE )
