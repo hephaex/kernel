@@ -1,5 +1,5 @@
-# The Linux Kernel review for ARMv7 3.13.0 (exynos 5420)
-All of this repository are written by hephaex@gmail.com.
+# The Linux Kernel review for ARMv7 3.13.x (exynos 5420)
+All of this repository by hephaex@gmail.com.
 
 Community name: kernel study a10th C team
 Target Soc    : Samsung Exynos 5420 (ARMv7 A7&A15 bigLITTLE )
@@ -169,13 +169,13 @@ Kernel version: Linux kernel 3.13.x
  - setup_arch()->setup_processor()
 ...
 
-* 11th (2012-07-06) week [11차](http://www.iamroot.org/xe/index.php?mid=Kernel_10_ARM&category=172676&page=6&document_srl=174738) 18+2명
+* 11th (2012-07-06) week [11차](https://github.com/hephaex/kernel_review/blob/master/a10c_11.md) 18+2명
  - arch/arm/boot/compressed/head.S 분석
  - _setup_mmu 종료
-* 10th (2012-06-29) week [10차](http://www.iamroot.org/xe/index.php?mid=Kernel_10_ARM&category=172676&page=6&document_srl=174738) 22명
+* 10th (2012-06-29) week [10차](https://github.com/hephaex/kernel_review/blob/master/a10c_10.md) 22명
  - arch/arm/boot/compressed/head.S 분석
  - _setup_mmu 진입직전
-* 09th (2012-06-22) week [09차](http://www.iamroot.org/xe/index.php?mid=Kernel_10_ARM&category=172676&page=6&document_srl=171562) 25명
+* 09th (2012-06-22) week [09차](https://github.com/hephaex/kernel_review/blob/master/a10c_09.md) 25명
  - Arm System Developer's Guide (Ch.14 ~ 끝)
  - arch/arm/boot/compressed/head.S 분석
  - call_cache_fn 진입직전
@@ -187,7 +187,7 @@ Kernel version: Linux kernel 3.13.x
  - ARM v7 아키텍쳐 세미나
 * 05th (2012-05-25) week [05차]
  - ARM v7 아키텍쳐 세미나
-* 04th (2012-05-18) week [04차] 28명+1 (백창우님)
+* 04th (2012-05-18) week [04차] 28명+1
  - Arm System Developer's Guide (pt자료)
 * 03th (2012-05-11) week [03차] 22명
  - 리눅스 커널 내부구조 (p.150 ~ 끝)
