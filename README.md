@@ -9,6 +9,10 @@ Kernel version: Linux kernel 3.13.x
 
 # The history of Linux kernel study
 
+
+* 113th (2015/08/08) week [113차](https://github.com/hephaex/kernel_review/blob/master/a10c_113.md)
+ - cgorup 초기 초기화 분석
+ - cgroup_early_init()
 * 112th (2015/08/01) week [112차](https://github.com/hephaex/kernel_review/blob/master/a10c_112.md)
  - cgroup 에 대한 이야기
  - LXC와 Docker 기술
