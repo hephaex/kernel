@@ -738,6 +738,8 @@ asmlinkage void __init start_kernel(void)
 	// softirq_vec[6]에 tasklet_action, softirq_vec[0]에 tasklet_hi_action 등록하여 초기화 수행
 
 	timekeeping_init();
+	// ntp 관련 전역변수 초기화, timekeeper, shadow_timekeeper의 맴버값 초기화 수행
+
 	time_init();
 	sched_clock_postinit();
 	perf_event_init();
