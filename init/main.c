@@ -754,7 +754,7 @@ asmlinkage void __init start_kernel(void)
 	// cfd_data 맴버값을 초기화하고 pcp에서 사용할 메모리 공간 할당
 	// cpu_chain에 hotplug_cfd_notifier 를 등록함
 
-
+	// irqs_disabled(): 1
 	WARN(!irqs_disabled(), "Interrupts were enabled early\n");
 	early_boot_irqs_disabled = false;
 	local_irq_enable();
