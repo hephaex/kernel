@@ -817,6 +817,8 @@ asmlinkage void __init start_kernel(void)
 	// BogoMIPS값을 결정하기위한 계산을 수행하고 결과를 출력함
 
 	pidmap_init();
+	// pidmap 을 사용하기 위한 초기화 수행
+
 	anon_vma_init();
 #ifdef CONFIG_X86
 	if (efi_enabled(EFI_RUNTIME_SERVICES))
