@@ -756,10 +756,15 @@ asmlinkage void __init start_kernel(void)
 
 	// irqs_disabled(): 1
 	WARN(!irqs_disabled(), "Interrupts were enabled early\n");
-	early_boot_irqs_disabled = false;
-	local_irq_enable();
 
-	kmem_cache_init_late();
+	// early_boot_irqs_disabled: true
+	early_boot_irqs_disabled = false;
+	// early_boot_irqs_disabled: false
+
+	local_irq_enable();
+	// IRQ를 enable 함
+
+	kmem_cache_init_late(); // null function
 
 	/*
 	 * HACK ALERT! This is early. We're enabling the console before
@@ -767,19 +772,22 @@ asmlinkage void __init start_kernel(void)
 	 * this. But we do want output early, in case something goes wrong.
 	 */
 	console_init();
+
+	// panic_later: NULL
 	if (panic_later)
 		panic(panic_later, panic_param);
 
-	lockdep_info();
+	lockdep_info(); // null function
 
 	/*
 	 * Need to run this when irqs are enabled, because it wants
 	 * to self-test [hard/soft]-irqs on/off lock inversion bugs
 	 * too:
 	 */
-	locking_selftest();
+	locking_selftest(); // null function
 
-#ifdef CONFIG_BLK_DEV_INITRD
+#ifdef CONFIG_BLK_DEV_INITRD // CONFIG_BLK_DEV_INITRD=y
+	// initrd_start: NULL, initrd_below_start_ok: 0
 	if (initrd_start && !initrd_below_start_ok &&
 	    page_to_pfn(virt_to_page((void *)initrd_start)) < min_low_pfn) {
 		pr_crit("initrd overwritten (0x%08lx < 0x%08lx) - disabling it.\n",
@@ -788,10 +796,14 @@ asmlinkage void __init start_kernel(void)
 		initrd_start = 0;
 	}
 #endif
-	page_cgroup_init();
-	debug_objects_mem_init();
-	kmemleak_init();
+
+	page_cgroup_init(); // null function
+	debug_objects_mem_init(); // null function
+	kmemleak_init(); // null function
+
 	setup_per_cpu_pageset();
+	// per cpu가 사용하는 pageset의 각각의 zone 맴버값 초기화 수행
+
 	numa_policy_init();
 	if (late_time_init)
 		late_time_init();
