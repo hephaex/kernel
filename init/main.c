@@ -820,7 +820,9 @@ asmlinkage void __init start_kernel(void)
 	// pidmap 을 사용하기 위한 초기화 수행
 
 	anon_vma_init();
-#ifdef CONFIG_X86
+	// anon vma 를 사용하기 위한 kmem_cache 할당자 초기화 수행
+
+#ifdef CONFIG_X86 // CONFIG_X86=n
 	if (efi_enabled(EFI_RUNTIME_SERVICES))
 		efi_enter_virtual_mode();
 #endif
