@@ -747,9 +747,14 @@ asmlinkage void __init start_kernel(void)
 	sched_clock_postinit();
 	// sched_clock_timer을 초기화 수행
 
-	perf_event_init();
-	profile_init();
+	perf_event_init(); // null function
+	profile_init(); // null function
 	call_function_init();
+	// 각 cpu core에서 사용할 call_single_queue를 맴버값 초기화
+	// cfd_data 맴버값을 초기화하고 pcp에서 사용할 메모리 공간 할당
+	// cpu_chain에 hotplug_cfd_notifier 를 등록함
+
+
 	WARN(!irqs_disabled(), "Interrupts were enabled early\n");
 	early_boot_irqs_disabled = false;
 	local_irq_enable();
