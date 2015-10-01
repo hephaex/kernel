@@ -826,8 +826,10 @@ asmlinkage void __init start_kernel(void)
 	if (efi_enabled(EFI_RUNTIME_SERVICES))
 		efi_enter_virtual_mode();
 #endif
-	thread_info_cache_init();
+	thread_info_cache_init(); // null function
 	cred_init();
+	// credentials 를 사용하기 위한 kmem_cache 할당자 초기화 수행
+
 	fork_init(totalram_pages);
 	proc_caches_init();
 	buffer_init();
