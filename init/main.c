@@ -726,6 +726,9 @@ asmlinkage void __init start_kernel(void)
 	// tick 관련 mask 변수를 0으로 초기화 수행
 
 	init_timers();
+	// boot_tvec_bases의 맴버 값을 초기화하고 timers_nb를 cpu_notifier 에 등록,
+	// softirq_vec[1] 에 run_timer_softirq 등록하여 초기화 수행
+
 	hrtimers_init();
 	softirq_init();
 	timekeeping_init();
