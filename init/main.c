@@ -814,6 +814,8 @@ asmlinkage void __init start_kernel(void)
 	// sched_clock_running 값을 1 로 초기화 수행
 
 	calibrate_delay();
+	// BogoMIPS값을 결정하기위한 계산을 수행하고 결과를 출력함
+
 	pidmap_init();
 	anon_vma_init();
 #ifdef CONFIG_X86
