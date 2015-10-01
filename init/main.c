@@ -745,6 +745,8 @@ asmlinkage void __init start_kernel(void)
 	// timer event를 위한 timer irq (MCT) 초기화 수행
 
 	sched_clock_postinit();
+	// sched_clock_timer을 초기화 수행
+
 	perf_event_init();
 	profile_init();
 	call_function_init();
