@@ -578,6 +578,7 @@ asmlinkage void __init start_kernel(void)
 	boot_init_stack_canary();
 
 	cgroup_init_early();
+	// cgroup 를 사용하기 위한 cgroup_dummy_root, cgroup_subsys 의 구조체 초기화 수행
 
 	local_irq_disable();
 	// IRQ를 disable한다.
