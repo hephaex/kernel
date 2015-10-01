@@ -583,6 +583,7 @@ asmlinkage void __init start_kernel(void)
 	local_irq_disable();
 	// IRQ를 disable한다.
 	early_boot_irqs_disabled = true;
+	// early_boot_irqs_disabled: true
 
 /*
  * Interrupts are still disabled. Do necessary setups, then
@@ -703,6 +704,8 @@ asmlinkage void __init start_kernel(void)
 	// integer ID management로 사용하는 idr_layer_cache에 kmem_cache#21 을 생성 및 초기화 후 할당
 
 	rcu_init();
+	// rcu 자료구조 bh, sched, preempt 를 각각 초기화 수행함
+
 	tick_nohz_init();
 	context_tracking_init();
 	radix_tree_init();
