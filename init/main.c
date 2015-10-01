@@ -804,10 +804,15 @@ asmlinkage void __init start_kernel(void)
 	setup_per_cpu_pageset();
 	// per cpu가 사용하는 pageset의 각각의 zone 맴버값 초기화 수행
 
-	numa_policy_init();
+	numa_policy_init(); // null function
+
+	// late_time_init: NULL
 	if (late_time_init)
 		late_time_init();
+
 	sched_clock_init();
+	// sched_clock_running 값을 1 로 초기화 수행
+
 	calibrate_delay();
 	pidmap_init();
 	anon_vma_init();
