@@ -715,10 +715,16 @@ asmlinkage void __init start_kernel(void)
 
 	/* init some links before init_ISA_irqs() */
 	early_irq_init();
+	// irq_desc 0 ~ 15 까지의 object을 할당 받고 초기화를 수행
+	// allocated_irqs에 bit를 1로 세팅하고 radix tree에 각 irq_desc를 노트로 추가
+
 	init_IRQ();
         // gic, combiner에 사용할 메모리 할당과 자료 구조 설정.
         // gic:IRQ[0:15], combiner:IRQ[32:63] 에 대한 인터럽트 활성화(enable)
+
 	tick_init();
+	// tick 관련 mask 변수를 0으로 초기화 수행
+
 	init_timers();
 	hrtimers_init();
 	softirq_init();
