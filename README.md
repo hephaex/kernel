@@ -8,6 +8,8 @@ Kernel version: Linux kernel 3.13.x
  - 2nd: start_kernel()->mm_init: 3.13.x 
 
 # The history of Linux kernel study
+* 117th (2015/09/19) week [117차](https://github.com/hephaex/kernel_review/blob/master/a10c_117.md)
+ - pidmap_init()
 * 116th (2015/09/13) week [116차](https://github.com/hephaex/kernel_review/blob/master/a10c_116.md)
 * 115th (2015/08/22) week [115차](https://github.com/hephaex/kernel_review/blob/master/a10c_115.md)
  - cgroup_early_init() 분석
