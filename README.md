@@ -8,6 +8,10 @@ Kernel version: Linux kernel 3.13.x
  - 2nd: start_kernel()->mm_init: 3.13.x 
 
 # The history of Linux kernel study
+* 124th (2015/11/21) week [124차](https://github.com/hephaex/kernel_review/blob/master/a10c_124.md)
+ - vfs_caches_init()
+  - mnt_init()
+    - sysfs_init()
 * 123th (2015/11/14) week [123차](https://github.com/hephaex/kernel_review/blob/master/a10c_123.md)
  - vfs_caches_init()
   - mnt_init()
