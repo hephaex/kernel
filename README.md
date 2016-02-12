@@ -20,6 +20,7 @@ Kernel version: Linux kernel 3.13.x
  - vfs_caches_init()
   - mnt_init()
     - sysfs_init()
+    - 
 * 127th (2015/12/12) week [127차](https://github.com/hephaex/kernel_review/blob/master/a10c_127.md)
  - vfs_caches_init()
   - mnt_init()
