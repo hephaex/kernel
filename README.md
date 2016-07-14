@@ -8,7 +8,13 @@ Kernel version: Linux kernel 3.13.x
  - 2nd: start_kernel()->mm_init: 3.13.x 
 
 # The history of Linux kernel study
-* 147th (2016/06/10) week [146차](https://github.com/hephaex/kernel_review/blob/master/a10c_147.md)
+* 150th (2016/07/09) week [150차](https://github.com/hephaex/kernel_review/blob/master/a10c_150.md)
+ - proc_root_init()
+* 149th (2016/07/02) week [149차](https://github.com/hephaex/kernel_review/blob/master/a10c_149.md)
+ -vfs_caches_init()
+* 148th (2016/06/25) week [148차](https://github.com/hephaex/kernel_review/blob/master/a10c_148.md)
+ -vfs_caches_init()
+* 147th (2016/06/10) week [147차](https://github.com/hephaex/kernel_review/blob/master/a10c_147.md)
  -vfs_caches_init()
 * 146th (2016/06/03) week [146차](https://github.com/hephaex/kernel_review/blob/master/a10c_146.md)
  -vfs_caches_init()
