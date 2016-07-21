@@ -30,19 +30,19 @@ Kernel version: Linux kernel 3.13.x
 * 142th (2016/04/30) week [142차](https://github.com/hephaex/kernel_review/blob/master/a10c_142.md)
  - vfs_caches_init()
    - mnt_init()
-   -init_mount_tree()
+   - init_mount_tree()
 * 141th (2016/04/23) week [141차](https://github.com/hephaex/kernel_review/blob/master/a10c_141.md)
  - vfs_caches_init()
    - mnt_init()
-   -init_mount_tree()
+   - init_mount_tree()
 * 140th (2016/04/16) week [140차](https://github.com/hephaex/kernel_review/blob/master/a10c_140.md)
  - vfs_caches_init()
    - mnt_init()
-   -init_mount_tree()
+   - init_mount_tree()
 * 139th (2016/04/09) week [139차](https://github.com/hephaex/kernel_review/blob/master/a10c_139.md)
  - vfs_caches_init()
    - mnt_init()
-   -init_mount_tree()
+   - init_mount_tree()
 * 138th (2016/03/26) week [138차](https://github.com/hephaex/kernel_review/blob/master/a10c_138.md)
  - vfs_caches_init()
   - mnt_init()
@@ -84,7 +84,6 @@ Kernel version: Linux kernel 3.13.x
  - vfs_caches_init()
   - mnt_init()
     - sysfs_init()
-    - 
 * 127th (2015/12/12) week [127차](https://github.com/hephaex/kernel_review/blob/master/a10c_127.md)
  - vfs_caches_init()
   - mnt_init()
@@ -97,7 +96,6 @@ Kernel version: Linux kernel 3.13.x
  - vfs_caches_init()
   - mnt_init()
     - sysfs_init()
-    - 
 * 124th (2015/11/21) week [124차](https://github.com/hephaex/kernel_review/blob/master/a10c_124.md)
  - vfs_caches_init()
   - mnt_init()
@@ -282,7 +280,9 @@ Kernel version: Linux kernel 3.13.x
   ->__alloc_pages()->__alloc_pages_nodemask();
  - 커널 버전을 3.13.11로 바꿨습니다.
 * 53th (2014/05/10) week [53차](https://github.com/hephaex/kernel_review/blob/master/a10c_53.md)  
+* 52th (2014/04/26) week [52차](https://github.com/hephaex/kernel_review/blob/master/a10c_52.md)
 * 51th (2014/04/19) week [51차](https://github.com/hephaex/kernel_review/blob/master/a10c_51.md)
+* 50th (2014/04/12) week [50차](https://github.com/hephaex/kernel_review/blob/master/a10c_50.md)
 
 ...
 
