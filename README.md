@@ -9,6 +9,8 @@ Kernel version: Linux kernel 3.13.x
 
 # The history of Linux kernel study
 
+* 156th (2016/07/30) week [153차](https://github.com/hephaex/kernel_review/blob/master/a10c_156.md)
+ - cgroup_init()
 * 155th (2016/07/30) week [153차](https://github.com/hephaex/kernel_review/blob/master/a10c_155.md)
  - cgroup_init()
 * 154th (2016/07/30) week [153차](https://github.com/hephaex/kernel_review/blob/master/a10c_154.md)
