@@ -11,7 +11,7 @@ Kernel version: Linux kernel 3.13.x
 * 161th (2016/11/05) week [161차](https://github.com/hephaex/kernel_review/blob/master/a10c_161.md)
  - rest_init()
 * 160th (2016/07/20) week [160차](https://github.com/hephaex/kernel_review/blob/master/a10c_160.md)
- - cgroup_init()
+ - rest_init()
 * 159th (2016/07/20) week [159차](https://github.com/hephaex/kernel_review/blob/master/a10c_159.md)
  - cgroup_init()
 * 158th (2016/07/13) week [158차](https://github.com/hephaex/kernel_review/blob/master/a10c_158.md)
